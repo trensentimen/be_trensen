@@ -1,4 +1,4 @@
-module github.com/trensentimen/be_trensen.git
+module github.com/trensentimen/be_trensen
 
 go 1.21.3
 
