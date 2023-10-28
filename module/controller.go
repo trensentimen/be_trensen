@@ -130,7 +130,9 @@ func SignIn(db *mongo.Database, col string, insertedDoc model.User) (user model.
 	if err != nil {
 		return
 	}
-	CheckPasswordHash(user.Password, existsDoc.Password)
+	if !CheckPasswordHash(user.Password, existsDoc.Password) {
+		return user, fmt.Errorf("password salah")
+	}
 
 	// return
 	return existsDoc, nil
