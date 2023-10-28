@@ -56,6 +56,12 @@ func GCFHandlerSignin(PASETOPRIVATEKEYENV, MONGOCONNSTRINGENV, dbname, collectio
 	return GCFReturnStruct(Response)
 }
 
+func GCFHandlerGetAll(MONGOCONNSTRINGENV, dbname, col string, docs interface{}) string {
+	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
+	data := GetAllDocs(conn, col, docs)
+	return GCFReturnStruct(data)
+}
+
 func GCFReturnStruct(DataStuct any) string {
 	jsondata, _ := json.Marshal(DataStuct)
 	return string(jsondata)
