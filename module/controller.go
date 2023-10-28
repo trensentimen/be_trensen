@@ -134,9 +134,6 @@ func SignIn(db *mongo.Database, col string, insertedDoc model.User) (user model.
 		return user, false, fmt.Errorf("password salah")
 	}
 
-	// return
-	// hash, _ := HashPassword(user.Password)
-	// return existsDoc, CheckPasswordHash(insertedDoc.Password, existsDoc.Password), nil
 	return existsDoc, true, nil
 }
 
@@ -164,4 +161,18 @@ func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err err
 		return doc, fmt.Errorf("kesalahan server")
 	}
 	return doc, nil
+}
+
+func getAllTopic(db *mongo.Database) (docs []model.Topic, err error) {
+	collection := db.Collection("topic")
+	filter := bson.M{}
+	cursor, err := collection.Find(context.Background(), filter)
+	if err != nil {
+		return docs, fmt.Errorf("kesalahan server")
+	}
+	err = cursor.All(context.Background(), &docs)
+	if err != nil {
+		return docs, fmt.Errorf("kesalahan server")
+	}
+	return docs, nil
 }

@@ -21,4 +21,11 @@ type Credential struct {
 type Topic struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	TopicName string             `json:"topicname" bson:"topicname"`
+	Range     string             `json:"range" bson:"range"`
+	Source    Sources            `json:"source" bson:"source"`
+}
+
+type Sources struct {
+	Name  string `json:"source" bson:"source"` // youtube/twitter
+	Value string `json:"value" bson:"value"`   // link
 }
