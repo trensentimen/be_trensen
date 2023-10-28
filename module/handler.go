@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
+	"strconv"
 
 	model "github.com/trensentimen/be_trensen/model"
 	"github.com/whatsauth/watoken"
@@ -39,7 +40,7 @@ func GCFHandlerSignin(PASETOPRIVATEKEYENV, MONGOCONNSTRINGENV, dbname, collectio
 		Response.Message = "error parsing application/json: " + err.Error()
 		return GCFReturnStruct(Response)
 	}
-	user, err := SignIn(conn, collectionname, dataUser)
+	user, status1, err := SignIn(conn, collectionname, dataUser)
 	if err != nil {
 		Response.Message = err.Error()
 		return GCFReturnStruct(Response)
@@ -50,7 +51,7 @@ func GCFHandlerSignin(PASETOPRIVATEKEYENV, MONGOCONNSTRINGENV, dbname, collectio
 	if err != nil {
 		Response.Message = "Gagal Encode Token : " + err.Error()
 	} else {
-		Response.Message = "Selamat Datang " + user.Email
+		Response.Message = "Selamat Datang " + user.Email + " di Trensentimen" + strconv.FormatBool(status1)
 		Response.Token = tokenstring
 	}
 	return GCFReturnStruct(Response)

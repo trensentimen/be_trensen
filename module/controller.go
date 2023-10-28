@@ -119,23 +119,25 @@ func SignUp(db *mongo.Database, col string, insertedDoc model.User) error {
 	return nil
 }
 
-func SignIn(db *mongo.Database, col string, insertedDoc model.User) (user model.User, err error) {
+func SignIn(db *mongo.Database, col string, insertedDoc model.User) (user model.User, Status bool, err error) {
 	if insertedDoc.Email == "" || insertedDoc.Password == "" {
-		return user, fmt.Errorf("mohon untuk melengkapi data")
+		return user, false, fmt.Errorf("mohon untuk melengkapi data")
 	}
 	if err = checkmail.ValidateFormat(insertedDoc.Email); err != nil {
-		return user, fmt.Errorf("email tidak valid")
+		return user, false, fmt.Errorf("email tidak valid")
 	}
 	existsDoc, err := GetUserFromEmail(insertedDoc.Email, db)
 	if err != nil {
 		return
 	}
-	if !CheckPasswordHash(user.Password, existsDoc.Password) {
-		return user, fmt.Errorf("password salah")
-	}
+	// if CheckPasswordHash(user.Password, existsDoc.Password) {
+	// 	return user, fmt.Errorf("password salah")
+	// }
 
 	// return
-	return existsDoc, nil
+	// hash, _ := HashPassword(user.Password)
+	return existsDoc, CheckPasswordHash(user.Password, existsDoc.Password), nil
+	// return existsDoc, nil
 }
 
 func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, err error) {
