@@ -130,14 +130,14 @@ func SignIn(db *mongo.Database, col string, insertedDoc model.User) (user model.
 	if err != nil {
 		return
 	}
-	// if CheckPasswordHash(user.Password, existsDoc.Password) {
-	// 	return user, fmt.Errorf("password salah")
-	// }
+	if !CheckPasswordHash(insertedDoc.Password, existsDoc.Password) {
+		return user, false, fmt.Errorf("password salah")
+	}
 
 	// return
 	// hash, _ := HashPassword(user.Password)
-	return existsDoc, CheckPasswordHash(user.Password, existsDoc.Password), nil
-	// return existsDoc, nil
+	// return existsDoc, CheckPasswordHash(insertedDoc.Password, existsDoc.Password), nil
+	return existsDoc, true, nil
 }
 
 func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, err error) {
