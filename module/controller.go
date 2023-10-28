@@ -37,7 +37,7 @@ func GetAllDocs(db *mongo.Database, col string, docs interface{}) interface{} {
 	filter := bson.M{}
 	cursor, err := collection.Find(context.TODO(), filter)
 	if err != nil {
-		fmt.Println("Error GetAllDocs in colecction", col, ":", err)
+		fmt.Println("Error GetAllDocs in colection", col, ":", err)
 	}
 	err = cursor.All(context.TODO(), &docs)
 	if err != nil {
@@ -117,6 +117,23 @@ func SignUp(db *mongo.Database, col string, insertedDoc model.User) error {
 		return err
 	}
 	return nil
+}
+
+func SignIn(db *mongo.Database, col string, insertedDoc model.User) (user model.User, err error) {
+	if insertedDoc.Email == "" || insertedDoc.Password == "" {
+		return user, fmt.Errorf("mohon untuk melengkapi data")
+	}
+	if err = checkmail.ValidateFormat(insertedDoc.Email); err != nil {
+		return user, fmt.Errorf("email tidak valid")
+	}
+	existsDoc, err := GetUserFromEmail(insertedDoc.Email, db)
+	if err != nil {
+		return
+	}
+	CheckPasswordHash(user.Password, existsDoc.Password)
+
+	// return
+	return existsDoc, nil
 }
 
 func GetUserFromID(_id primitive.ObjectID, db *mongo.Database) (doc model.User, err error) {
