@@ -57,3 +57,18 @@ func TestGetUserFromID(t *testing.T) {
 		fmt.Println("Welcome bang:", user)
 	}
 }
+
+func TestAddTopic(t *testing.T) {
+	var doc model.Topic
+	doc.TopicName = "Erdito Nausha Adam"
+	doc.Source.Name = "Twitter"
+	doc.Source.Value = "https://twitter.com/erditonausha"
+	doc.Source.DateRange = "2021/01/01-2021/01/31"
+
+	_id, err := module.AddTopic(db, doc)
+	if err != nil {
+		t.Errorf("Error inserting document: %v", err)
+	} else {
+		fmt.Println("Data berhasil disimpan dengan id :", _id)
+	}
+}

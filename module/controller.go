@@ -163,7 +163,16 @@ func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err err
 	return doc, nil
 }
 
-func getAllTopic(db *mongo.Database) (docs []model.Topic, err error) {
+func AddTopic(db *mongo.Database, doc model.Topic) (insertedID primitive.ObjectID, err error) {
+	result, err := db.Collection("topic").InsertOne(context.Background(), doc)
+	if err != nil {
+		return insertedID, fmt.Errorf("kesalahan server : insert")
+	}
+	insertedID = result.InsertedID.(primitive.ObjectID)
+	return insertedID, nil
+}
+
+func GetAllTopic(db *mongo.Database) (docs []model.Topic, err error) {
 	collection := db.Collection("topic")
 	filter := bson.M{}
 	cursor, err := collection.Find(context.Background(), filter)
