@@ -57,10 +57,25 @@ func GCFHandlerSignin(PASETOPRIVATEKEYENV, MONGOCONNSTRINGENV, dbname, collectio
 	return GCFReturnStruct(Response)
 }
 
-func GCFHandlerGetAll(MONGOCONNSTRINGENV, dbname, col string, docs interface{}) string {
+func GCFHandlerGetAllTopic(MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
 	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
-	data := GetAllDocs(conn, col, docs)
-	return GCFReturnStruct(data)
+	var Response model.TopicResponse
+	Response.Status = false
+	var dataUser model.User
+	err := json.NewDecoder(r.Body).Decode(&dataUser)
+	if err != nil {
+		Response.Message = "error parsing application/json: " + err.Error()
+		return GCFReturnStruct(Response)
+	}
+	topic, err := GetAllTopic(conn)
+	if err != nil {
+		Response.Message = "error parsing application/json: " + err.Error()
+		return GCFReturnStruct(Response)
+	}
+	Response.Status = true
+	Response.Message = "Selamat Datang " + dataUser.Email
+	Response.Data = topic
+	return GCFReturnStruct(Response)
 }
 
 func GCFReturnStruct(DataStuct any) string {

@@ -39,15 +39,15 @@ func TestGeneratePrivateKeyPaseto(t *testing.T) {
 }
 
 func TestValidateToken(t *testing.T) {
-	tokenstring := "v4.public.eyJleHAiOiIyMDIzLTEwLTE4VDE0OjIwOjE4WiIsImlhdCI6IjIwMjMtMTAtMThUMTI6MjA6MThaIiwiaWQiOiJkYW5pIiwibmJmIjoiMjAyMy0xMC0xOFQxMjoyMDoxOFoiffzDySc-bv3-c0Nv8xbJmWfjEntNupxaEFfom7WMocHgd8kRQyLg5DPs1poyv9RCJouac3CPfMI2eG1TS--zmQA" // Gantilah dengan token PASETO yang sesuai
+	tokenstring := "v4.public.eyJleHAiOiIyMDIzLTExLTAxVDEwOjMyOjUwWiIsImlhdCI6IjIwMjMtMTEtMDFUMDg6MzI6NTBaIiwiaWQiOiJlcmRpdG9AZ21haWwuY29tIiwibmJmIjoiMjAyMy0xMS0wMVQwODozMjo1MFoifccdJ4gDflIwsmYHT2oMeeJKKlQFp6PqBNEX962mpSPb-2BbyeeeDjTpCdF3RoYD9ufJN3gmzMIZCLPnglBUwg0" // Gantilah dengan token PASETO yang sesuai
 	publicKey := "f48bd58cb3b3972d05bb9303b15ce9b83f4fcb9c871d1b05906f2fec20620ea0"
 	payload, _err := watoken.Decode(publicKey, tokenstring)
 	if _err != nil {
 		fmt.Println("expire token", _err)
 	} else {
-		fmt.Println(payload.Id)
-		fmt.Println(payload.Nbf)
-		fmt.Println(payload.Iat)
+		fmt.Println(payload)
+		// fmt.Println(payload.Nbf)
+		// fmt.Println(payload.Iat)
 		fmt.Println(payload.Exp)
 	}
 

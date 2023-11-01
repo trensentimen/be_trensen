@@ -24,6 +24,12 @@ type Topic struct {
 	Source    Sources            `json:"source" bson:"source"`
 }
 
+type TopicResponse struct {
+	Status  bool    `json:"status" bson:"status"`
+	Message string  `json:"message,omitempty" bson:"message,omitempty"`
+	Data    []Topic `json:"data" bson:"data"`
+}
+
 type Sources struct {
 	Name      string `json:"source" bson:"source"` // youtube/twitter
 	Value     string `json:"value" bson:"value"`   // link
