@@ -68,7 +68,7 @@ func GCFHandlerGetAllTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collecti
 	token := r.Header.Get("Authorization")
 	token = strings.TrimPrefix(token, "Bearer ")
 	if token == "" {
-		Response.Message = "error parsing application/json:"
+		Response.Message = "error parsing application/json1:"
 		return GCFReturnStruct(Response)
 	}
 
@@ -76,18 +76,18 @@ func GCFHandlerGetAllTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collecti
 	_, err1 := watoken.Decode(PASETOPUBLICKEY, token)
 
 	if err1 != nil {
-		Response.Message = "error parsing application/json: " + err1.Error()
+		Response.Message = "error parsing application/json2: " + err1.Error()
 		return GCFReturnStruct(Response)
 	}
 
 	err := json.NewDecoder(r.Body).Decode(&dataUser)
 	if err != nil {
-		Response.Message = "error parsing application/json: " + err.Error()
+		Response.Message = "error parsing application/json3: " + err.Error()
 		return GCFReturnStruct(Response)
 	}
 	topic, err := GetAllTopic(conn)
 	if err != nil {
-		Response.Message = "error parsing application/json: " + err.Error()
+		Response.Message = "error parsing application/json4: " + err.Error()
 		return GCFReturnStruct(Response)
 	}
 	Response.Status = true
