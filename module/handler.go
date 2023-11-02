@@ -96,6 +96,43 @@ func GCFHandlerGetAllTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collecti
 	return GCFReturnStruct(Response)
 }
 
+func GCFHandlerAddTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
+	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
+	var Response model.TopicResponse
+	Response.Status = false
+	var dataTopic model.Topic
+
+	// get token from header
+	token := r.Header.Get("Authorization")
+	token = strings.TrimPrefix(token, "Bearer ")
+	if token == "" {
+		Response.Message = "error parsing application/json1:"
+		return GCFReturnStruct(Response)
+	}
+
+	// decode token
+	_, err1 := watoken.Decode(PASETOPUBLICKEY, token)
+
+	if err1 != nil {
+		Response.Message = "error parsing application/json2: " + err1.Error() + ";" + token
+		return GCFReturnStruct(Response)
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&dataTopic)
+	if err != nil {
+		Response.Message = "error parsing application/json3: " + err.Error()
+		return GCFReturnStruct(Response)
+	}
+	_, err = AddTopic(conn, dataTopic)
+	if err != nil {
+		Response.Message = "error parsing application/json4: " + err.Error()
+		return GCFReturnStruct(Response)
+	}
+	Response.Status = true
+	Response.Message = "Topic berhasil ditambahkan"
+	return GCFReturnStruct(Response)
+}
+
 func GCFReturnStruct(DataStuct any) string {
 	jsondata, _ := json.Marshal(DataStuct)
 	return string(jsondata)
