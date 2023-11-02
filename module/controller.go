@@ -2,6 +2,7 @@ package betrens
 
 import (
 	"context"
+	"os"
 
 	// "crypto/rand"
 	// "encoding/hex"
@@ -24,8 +25,8 @@ import (
 )
 
 func MongoConnect(MongoString, dbname string) *mongo.Database {
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb+srv://admin:admin@projectexp.pa7k8.gcp.mongodb.net"))
-	// client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(os.Getenv(MongoString)))
+	// client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb+srv://admin:admin@projectexp.pa7k8.gcp.mongodb.net"))
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(os.Getenv(MongoString)))
 	if err != nil {
 		fmt.Printf("MongoConnect: %v\n", err)
 	}

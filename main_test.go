@@ -39,7 +39,8 @@ func TestGeneratePrivateKeyPaseto(t *testing.T) {
 }
 
 func TestValidateToken(t *testing.T) {
-	tokenstring := "v4.public.eyJleHAiOiIyMDIzLTExLTAxVDEwOjMyOjUwWiIsImlhdCI6IjIwMjMtMTEtMDFUMDg6MzI6NTBaIiwiaWQiOiJlcmRpdG9AZ21haWwuY29tIiwibmJmIjoiMjAyMy0xMS0wMVQwODozMjo1MFoifccdJ4gDflIwsmYHT2oMeeJKKlQFp6PqBNEX962mpSPb-2BbyeeeDjTpCdF3RoYD9ufJN3gmzMIZCLPnglBUwg0" // Gantilah dengan token PASETO yang sesuai
+	tokenstring := "Bearer v4.public.eyJleHAiOiIyMDIzLTExLTAyVDA3OjA4OjMzWiIsImlhdCI6IjIwMjMtMTEtMDJUMDU6MDg6MzNaIiwiaWQiOiJlcmRpdG9AZ21haWwuY29tIiwibmJmIjoiMjAyMy0xMS0wMlQwNTowODozM1oifTzDGPfgi7dYoY_MhpsfndX6mR7srxjJK98J3S_PzeCMAWjDmSngxhxMFpCCrq8zdIu2xP1ziBGQ34oPUo04KAw" // Gantilah dengan token PASETO yang sesuai
+	tokenstring = strings.TrimPrefix(tokenstring, "Bearer ")
 	publicKey := "f48bd58cb3b3972d05bb9303b15ce9b83f4fcb9c871d1b05906f2fec20620ea0"
 	payload, _err := watoken.Decode(publicKey, tokenstring)
 	if _err != nil {

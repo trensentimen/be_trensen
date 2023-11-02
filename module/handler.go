@@ -73,10 +73,10 @@ func GCFHandlerGetAllTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collecti
 	}
 
 	// decode token
-	_, err1 := watoken.Decode(PASETOPUBLICKEY, token)
+	_, err1 := watoken.Decode(os.Getenv(PASETOPUBLICKEY), token)
 
 	if err1 != nil {
-		Response.Message = "error parsing application/json2: " + err1.Error()
+		Response.Message = "error parsing application/json2: " + err1.Error() + ";" + token
 		return GCFReturnStruct(Response)
 	}
 
@@ -111,7 +111,7 @@ func GCFHandlerAddTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collectionn
 	}
 
 	// decode token
-	_, err1 := watoken.Decode(PASETOPUBLICKEY, token)
+	_, err1 := watoken.Decode(os.Getenv(PASETOPUBLICKEY), token)
 
 	if err1 != nil {
 		Response.Message = "error parsing application/json2: " + err1.Error() + ";" + token

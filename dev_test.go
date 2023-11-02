@@ -60,10 +60,10 @@ func TestGetUserFromID(t *testing.T) {
 
 func TestAddTopic(t *testing.T) {
 	var doc model.Topic
-	doc.TopicName = "Erdito Nausha Adam"
-	doc.Source.Name = "Twitter"
+	doc.TopicName = "Erdito Nausha Adam2"
+	doc.Source.Name = "yutube"
 	doc.Source.Value = "https://twitter.com/erditonausha"
-	doc.Source.DateRange = "2021/01/01-2021/01/31"
+	// doc.Source.DateRange = "2021/01/01-2021/01/31"
 
 	_id, err := module.AddTopic(db, doc)
 	if err != nil {
@@ -71,4 +71,15 @@ func TestAddTopic(t *testing.T) {
 	} else {
 		fmt.Println("Data berhasil disimpan dengan id :", _id)
 	}
+}
+
+func TestGetAllTopic(t *testing.T) {
+	var docs []model.Topic
+	docs, err := module.GetAllTopic(db)
+	if err != nil {
+		t.Errorf("Error inserting document: %v", err)
+	} else {
+		fmt.Println("Data berhasil disimpan dengan id :", docs)
+	}
+	fmt.Println(docs)
 }
