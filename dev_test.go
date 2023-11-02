@@ -50,12 +50,17 @@ func TestGetUserFromID(t *testing.T) {
 	// doc.ID = "653d3367e56f0084ac013212"
 	id := "653d3367e56f0084ac013212"
 	objectId, err := primitive.ObjectIDFromHex(id)
-	user, err := module.GetUserFromID(objectId, db)
 	if err != nil {
 		t.Errorf("Error getting document: %v", err)
 	} else {
-		fmt.Println("Welcome bang:", user)
+		user, err := module.GetUserFromID(objectId, db)
+		if err != nil {
+			t.Errorf("Error getting document: %v", err)
+		} else {
+			fmt.Println("Welcome bang:", user)
+		}
 	}
+
 }
 
 func TestAddTopic(t *testing.T) {
@@ -82,4 +87,43 @@ func TestGetAllTopic(t *testing.T) {
 		fmt.Println("Data berhasil disimpan dengan id :", docs)
 	}
 	fmt.Println(docs)
+}
+
+func TestUpdateTopic(t *testing.T) {
+	var doc model.Topic
+	doc.TopicName = "dani"
+	doc.Source.Name = "yutube"
+	doc.Source.Value = "https://twitter.com/erditonausha"
+	doc.Source.DateRange = "2021/01/01-2021/01/31"
+	id, err := primitive.ObjectIDFromHex("653d4c011bdcf0c3ea14ee0a")
+	doc.ID = id
+	if err != nil {
+		fmt.Printf("Data tidak berhasil diubah dengan id")
+	} else {
+
+		err = module.UpdateTopic(db, doc)
+		if err != nil {
+			t.Errorf("Error updateting document: %v", err)
+		} else {
+			fmt.Println("Data berhasil diubah dengan id :", doc.ID)
+		}
+	}
+
+}
+
+func TestDeleteTopic(t *testing.T) {
+	var doc model.Topic
+	id, err := primitive.ObjectIDFromHex("653d4c011bdcf0c3ea14ee0a")
+	doc.ID = id
+	if err != nil {
+		fmt.Printf("Data tidak berhasil dihapus dengan id")
+	} else {
+
+		err = module.DeleteTopic(db, doc)
+		if err != nil {
+			t.Errorf("Error updateting document: %v", err)
+		} else {
+			fmt.Println("Data berhasil dihapus dengan id :", doc.ID)
+		}
+	}
 }

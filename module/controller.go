@@ -186,3 +186,34 @@ func GetAllTopic(db *mongo.Database) (docs []model.Topic, err error) {
 	}
 	return docs, nil
 }
+
+// update topic
+func UpdateTopic(db *mongo.Database, doc model.Topic) (err error) {
+	filter := bson.M{"_id": doc.ID}
+	result, err := db.Collection("topic").UpdateOne(context.Background(), filter, bson.M{"$set": doc})
+	if err != nil {
+		fmt.Printf("UpdateTopic: %v\n", err)
+		return
+	}
+	if result.ModifiedCount == 0 {
+		err = errors.New("no data has been changed with the specified id")
+		return
+	}
+	return nil
+}
+
+// delete topic
+func DeleteTopic(db *mongo.Database, doc model.Topic) error {
+	collection := db.Collection("topic")
+	filter := bson.M{"_id": doc.ID}
+	result, err := collection.DeleteOne(context.Background(), filter)
+	if err != nil {
+		return fmt.Errorf("error deleting data for ID %s: %s", doc.ID, err.Error())
+	}
+
+	if result.DeletedCount == 0 {
+		return fmt.Errorf("data with ID %s not found", doc.ID)
+	}
+
+	return nil
+}
