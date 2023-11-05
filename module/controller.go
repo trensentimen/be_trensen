@@ -217,3 +217,29 @@ func DeleteTopic(db *mongo.Database, doc model.Topic) error {
 
 	return nil
 }
+
+func EncryptString(text string) (string, error) {
+	key := []byte("a16bytekeyforAES")
+	// text := "Hello, Golang!"
+
+	encryptedText, err := encrypt(text, key)
+	if err != nil {
+		fmt.Println("Error encrypting:", err)
+		return "", err
+	}
+
+	return encryptedText, nil
+}
+
+func DecryptString(encryptedText string) (string, error) {
+	key := []byte("a16bytekeyforAES")
+
+	decryptedText, err := decrypt(encryptedText, key)
+	if err != nil {
+		// fmt.Println("Error decrypting:", err)
+		return "", err
+	}
+
+	// fmt.Println("Decrypted:", decryptedText)
+	return decryptedText, nil
+}
