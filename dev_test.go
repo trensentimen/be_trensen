@@ -66,7 +66,7 @@ func TestGetUserFromID(t *testing.T) {
 func TestAddTopic(t *testing.T) {
 	var doc model.Topic
 	doc.TopicName = "Erdito Nausha Adam2"
-	doc.Source.Name = "yutube"
+	doc.Source.Source = "yutube"
 	doc.Source.Value = "https://twitter.com/erditonausha"
 	// doc.Source.DateRange = "2021/01/01-2021/01/31"
 
@@ -75,6 +75,22 @@ func TestAddTopic(t *testing.T) {
 		t.Errorf("Error inserting document: %v", err)
 	} else {
 		fmt.Println("Data berhasil disimpan dengan id :", _id)
+	}
+}
+
+func TestGetTopic(t *testing.T) {
+	var doc model.Topic
+	id, err := primitive.ObjectIDFromHex("6549bae758638dd4f0137a11")
+	doc.ID = id
+	if err != nil {
+		t.Errorf("Error getting document: %v", err)
+	} else {
+		doc, err := module.GetTopic(doc.ID, db)
+		if err != nil {
+			t.Errorf("Error getting document: %v", err)
+		} else {
+			fmt.Println("Welcome bang:", doc)
+		}
 	}
 }
 
@@ -92,7 +108,7 @@ func TestGetAllTopic(t *testing.T) {
 func TestUpdateTopic(t *testing.T) {
 	var doc model.Topic
 	doc.TopicName = "dani"
-	doc.Source.Name = "yutube"
+	doc.Source.Source = "yutube"
 	doc.Source.Value = "https://twitter.com/erditonausha"
 	doc.Source.DateRange = "2021/01/01-2021/01/31"
 	id, err := primitive.ObjectIDFromHex("653d4c011bdcf0c3ea14ee0a")

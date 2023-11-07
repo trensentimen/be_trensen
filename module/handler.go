@@ -58,6 +58,44 @@ func GCFHandlerSignin(PASETOPRIVATEKEYENV, MONGOCONNSTRINGENV, dbname, collectio
 	return GCFReturnStruct(Response)
 }
 
+func GCFHandlerGetTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
+	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
+	var Response model.TopicResponse
+	Response.Status = false
+	var dataUser model.User
+
+	// get token from header
+	token := r.Header.Get("Authorization")
+	token = strings.TrimPrefix(token, "Bearer ")
+	if token == "" {
+		Response.Message = "error parsing application/json1:" + token
+		return GCFReturnStruct(Response)
+	}
+
+	// decode token
+	_, err1 := watoken.Decode(os.Getenv(PASETOPUBLICKEY), token)
+
+	if err1 != nil {
+		Response.Message = "error parsing application/json2: " + err1.Error() + ";" + token
+		return GCFReturnStruct(Response)
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&dataUser)
+	if err != nil {
+		Response.Message = "error parsing application/json3: " + err.Error()
+		return GCFReturnStruct(Response)
+	}
+	topic, err := GetTopic(dataUser.ID, conn)
+	if err != nil {
+		Response.Message = "error parsing application/json4: " + err.Error()
+		return GCFReturnStruct(Response)
+	}
+	Response.Status = true
+	Response.Message = "Selamat Datang " + dataUser.Email
+	Response.Data = []model.Topic{topic}
+	return GCFReturnStruct(Response)
+}
+
 func GCFHandlerGetAllTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
 	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
 	var Response model.TopicResponse

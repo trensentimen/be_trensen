@@ -22,6 +22,7 @@ type Topic struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	TopicName string             `json:"topicname" bson:"topicname"`
 	Source    Sources            `json:"source" bson:"source"`
+	Status    string             `json:"status" bson:"status"` // done/pending
 }
 
 type TopicResponse struct {
@@ -31,7 +32,7 @@ type TopicResponse struct {
 }
 
 type Sources struct {
-	Name      string `json:"source" bson:"source"` // youtube/twitter
+	Source    string `json:"source" bson:"source"` // youtube/twitter
 	Value     string `json:"value" bson:"value"`   // link
 	DateRange string `json:"date_range" bson:"date_range"`
 }

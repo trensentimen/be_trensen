@@ -173,6 +173,19 @@ func AddTopic(db *mongo.Database, doc model.Topic) (insertedID primitive.ObjectI
 	return insertedID, nil
 }
 
+func GetTopic(_id primitive.ObjectID, db *mongo.Database) (doc model.Topic, err error) {
+	collection := db.Collection("topic")
+	filter := bson.M{"_id": _id}
+	err = collection.FindOne(context.Background(), filter).Decode(&doc)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return doc, fmt.Errorf("no data found for ID %s", _id)
+		}
+		return doc, fmt.Errorf("error retrieving data for ID %s: %s", _id, err.Error())
+	}
+	return doc, nil
+}
+
 func GetAllTopic(db *mongo.Database) (docs []model.Topic, err error) {
 	collection := db.Collection("topic")
 	filter := bson.M{}
