@@ -205,6 +205,7 @@ func GCFHandlerUpdateTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collecti
 	}
 	Response.Status = true
 	Response.Message = "Topic berhasil diupdate"
+	Response.Data = []model.Topic{dataTopic}
 	return GCFReturnStruct(Response)
 }
 
