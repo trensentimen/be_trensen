@@ -2,12 +2,15 @@ package betrens
 
 import (
 	"context"
+	"crypto/rand"
 	"os"
 
+	"math/big"
 	// "crypto/rand"
 	// "encoding/hex"
 	"errors"
 	"fmt"
+	"time"
 
 	"strings"
 
@@ -45,6 +48,19 @@ func GetAllDocs(db *mongo.Database, col string, docs interface{}) interface{} {
 		fmt.Println(err)
 	}
 	return docs
+}
+
+func GetOTPbyEmail(email string, db *mongo.Database) (doc model.Otp, err error) {
+	collection := db.Collection("otp")
+	filter := bson.M{"email": email}
+	err = collection.FindOne(context.TODO(), filter).Decode(&doc)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return doc, fmt.Errorf("email tidak ditemukan")
+		}
+		return doc, fmt.Errorf("kesalahan server")
+	}
+	return doc, nil
 }
 
 func InsertOneDoc(db *mongo.Database, col string, doc interface{}) (insertedID primitive.ObjectID, err error) {
@@ -255,4 +271,76 @@ func DecryptString(encryptedText string) (string, error) {
 
 	// fmt.Println("Decrypted:", decryptedText)
 	return decryptedText, nil
+}
+
+func OtpGenerate() (string, error) {
+	randomNumber, err := rand.Int(rand.Reader, big.NewInt(10000))
+	if err != nil {
+		return "", err
+	}
+	// Format the random number as a 4-digit string
+	otp := fmt.Sprintf("%04d", randomNumber)
+
+	return otp, nil
+}
+
+func GenerateExpiredAt() int64 {
+	currentTime := time.Now()
+
+	// Add 5 minutes
+	newTime := currentTime.Add(5 * time.Minute)
+	return newTime.Unix()
+}
+
+func SendOTP(db *mongo.Database, email string) (string, error) {
+	// GET OTP
+	otp, _ := OtpGenerate()
+
+	// GET EXPIRED AT
+	expiredAt := GenerateExpiredAt()
+
+	// get user by email
+	existsDoc, err := GetUserFromEmail(email, db)
+	if err != nil {
+		return "", fmt.Errorf("email tidak ditemukan1")
+	}
+	if existsDoc.Email == "" {
+		return "", fmt.Errorf("email tidak ditemukan2")
+	}
+
+	// save otp to db
+	// objectId := primitive.NewObjectID()
+	otpDoc := bson.M{
+		// "_id":       objectId,
+		"email":     email,
+		"otp":       otp,
+		"expiredat": expiredAt,
+	}
+
+	// get otp by email
+	_, err = GetOTPbyEmail(email, db)
+
+	if err != nil {
+		if err.Error() == "email tidak ditemukan" {
+			// return "", fmt.Errorf("error getting OTP from email: %s", err.Error())
+			// insert new OTP
+			_, err = db.Collection("otp").InsertOne(context.Background(), otpDoc)
+			if err != nil {
+				return "", fmt.Errorf("error inserting OTP: %s", err.Error())
+			}
+			return otp, nil
+		} else {
+			return "", fmt.Errorf("error Get OTP: %s", err.Error())
+		}
+	} else {
+		// update existing OTP
+		filter := bson.M{"email": email}
+		update := bson.M{"$set": otpDoc}
+		_, err = db.Collection("otp").UpdateOne(context.Background(), filter, update)
+		if err != nil {
+			return "", fmt.Errorf("error updating OTP: %s", err.Error())
+		}
+	}
+
+	return "error", nil
 }

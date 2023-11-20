@@ -181,3 +181,22 @@ func TestGenerateOTP(t *testing.T) {
 	fmt.Println(otp)
 	fmt.Println(expiredAt)
 }
+
+func TestSendOTP(t *testing.T) {
+	var email = ""
+	otp, _ := module.OtpGenerate()
+	var expiredAt = module.GenerateExpiredAt()
+	var doc model.Otp
+	doc.Email = email
+	doc.OTP = otp
+	doc.ExpiredAt = expiredAt
+	fmt.Println(otp)
+	fmt.Println(expiredAt)
+	otp, err := module.SendOTP(db, "email@gmail.com")
+	if err != nil {
+		fmt.Println("Error sending otp: ", err)
+	} else {
+		fmt.Println("Data berhasil dikirim :", otp)
+	}
+
+}
