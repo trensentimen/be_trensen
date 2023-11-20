@@ -43,4 +43,5 @@ type Otp struct {
 	Email     string             `json:"email" bson:"email"`
 	OTP       string             `json:"otp" bson:"otp"`
 	ExpiredAt int64              `json:"expiredat" bson:"expiredat"`
+	Status    bool               `json:"status" bson:"status"`
 }

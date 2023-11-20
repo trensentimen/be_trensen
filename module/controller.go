@@ -379,38 +379,31 @@ func SendOTP(db *mongo.Database, email string) (string, error) {
 	return "success", nil
 }
 
-func SentPost(db *mongo.Database) (string, error) {
-	url := "https://api.wa.my.id/api/send/message/text"
-
-	// Data yang akan dikirimkan dalam format JSON
-	jsonStr := []byte(`{
-        "to": "6295156119352",
-        "isgroup": false,
-        "messages": "kode Otp akun trensentimen.my.id anda adalah *1234*"
-    }`)
-
-	// Membuat permintaan HTTP POST
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+func CheckOTP(db *mongo.Database, email, otp string) (string, error) {
+	// get otp by email
+	otpDoc, err := GetOTPbyEmail(email, db)
 	if err != nil {
-		fmt.Println("Error creating request:", err)
-		return "", err
+		return "", fmt.Errorf("error Get OTP: %s", err.Error())
 	}
 
-	// Menambahkan header ke permintaan
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Token", "v4.public.eyJleHAiOiIyMDIzLTEyLTE2VDE3OjQ3OjQ3KzA3OjAwIiwiaWF0IjoiMjAyMy0xMS0xNlQxNzo0Nzo0NyswNzowMCIsImlkIjoiNjI4NTcwMzMwNTE2MyIsIm5iZiI6IjIwMjMtMTEtMTZUMTc6NDc6NDcrMDc6MDAifXlYzCjMwUnUHhdyWpcQyq33tOKlhJIWHzBr5Zq2PgmYxjeghbWqkS1QUH7ojfzPYd1fIaWOHnoE29zbE-v_tQk")
-	req.Header.Set("Content-Type", "application/json")
-
-	// Melakukan permintaan HTTP POST
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Error sending request:", err)
-		return "", err
+	// check otp
+	if otpDoc.OTP != otp {
+		return "", fmt.Errorf("otp tidak valid")
 	}
-	defer resp.Body.Close()
 
-	// Menampilkan respons dari server
-	fmt.Println("Response Status:", resp.Status)
-	return "success", nil
+	// check expired at
+	if otpDoc.ExpiredAt < time.Now().Unix() {
+		return "", fmt.Errorf("otp telah kadaluarsa")
+	}
+
+	//update otp
+	filter := bson.M{"email": email}
+	update := bson.M{"$set": bson.M{"status": true}}
+	_, err = db.Collection("otp").UpdateOne(context.Background(), filter, update)
+
+	if err != nil {
+		return "", fmt.Errorf("error updating OTP: %s", err.Error())
+	}
+
+	return otp, nil
 }
