@@ -10,6 +10,7 @@ type User struct {
 	Password string             `json:"password" bson:"password"`
 	Email    string             `json:"email" bson:"email"`
 	Role     string             `json:"role,omitempty" bson:"role,omitempty"`
+	NoHp     string             `json:"nohp,omitempty" bson:"nohp,omitempty"`
 }
 
 type Credential struct {
@@ -35,4 +36,11 @@ type Sources struct {
 	Source    string `json:"source" bson:"source"` // youtube/twitter
 	Value     string `json:"value" bson:"value"`   // link
 	DateRange string `json:"date_range" bson:"date_range"`
+}
+
+type Otp struct {
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	Email     string             `json:"email" bson:"email"`
+	OTP       string             `json:"otp" bson:"otp"`
+	ExpiredAt int64              `json:"expiredat" bson:"expiredat"`
 }

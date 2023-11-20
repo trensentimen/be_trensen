@@ -169,3 +169,15 @@ func TestDecrypt(t *testing.T) {
 		fmt.Println("Data berhasil didekripsi :", textDecrypt)
 	}
 }
+
+func TestGenerateOTP(t *testing.T) {
+	var email = ""
+	otp, _ := module.OtpGenerate()
+	var expiredAt = module.GenerateExpiredAt()
+	var doc model.Otp
+	doc.Email = email
+	doc.OTP = otp
+	doc.ExpiredAt = expiredAt
+	fmt.Println(otp)
+	fmt.Println(expiredAt)
+}
