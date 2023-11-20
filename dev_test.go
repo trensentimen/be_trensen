@@ -200,3 +200,13 @@ func TestSendOTP(t *testing.T) {
 	}
 
 }
+
+func TestPOSTSendOTP(t *testing.T) {
+
+	otp, err := module.SentPost(db)
+	if err != nil {
+		fmt.Println("Error sending otp: ", err)
+	} else {
+		fmt.Println("Data berhasil dikirim :", otp)
+	}
+}

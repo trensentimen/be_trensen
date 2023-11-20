@@ -1,6 +1,7 @@
 package betrens
 
 import (
+	"bytes"
 	"context"
 	"crypto/rand"
 	"os"
@@ -10,9 +11,9 @@ import (
 	// "encoding/hex"
 	"errors"
 	"fmt"
-	"time"
-
+	"net/http"
 	"strings"
+	"time"
 
 	"github.com/badoux/checkmail"
 
@@ -342,5 +343,74 @@ func SendOTP(db *mongo.Database, email string) (string, error) {
 		}
 	}
 
-	return "error", nil
+	// postapi
+	url := "https://api.wa.my.id/api/send/message/text"
+
+	// Data yang akan dikirimkan dalam format JSON
+	jsonStr := []byte(`{
+        "to": "` + existsDoc.PhoneNumber + `",
+        "isgroup": false,
+        "messages": "kode Otp akun trensentimen.my.id anda adalah *` + otp + `*"
+    }`)
+
+	// Membuat permintaan HTTP POST
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	if err != nil {
+		fmt.Println("Error creating request:", err)
+		return "", err
+	}
+
+	// Menambahkan header ke permintaan
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Token", "v4.public.eyJleHAiOiIyMDIzLTEyLTE2VDE3OjQ3OjQ3KzA3OjAwIiwiaWF0IjoiMjAyMy0xMS0xNlQxNzo0Nzo0NyswNzowMCIsImlkIjoiNjI4NTcwMzMwNTE2MyIsIm5iZiI6IjIwMjMtMTEtMTZUMTc6NDc6NDcrMDc6MDAifXlYzCjMwUnUHhdyWpcQyq33tOKlhJIWHzBr5Zq2PgmYxjeghbWqkS1QUH7ojfzPYd1fIaWOHnoE29zbE-v_tQk")
+	req.Header.Set("Content-Type", "application/json")
+
+	// Melakukan permintaan HTTP POST
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	// Menampilkan respons dari server
+	fmt.Println("Response Status:", resp.Status)
+	return "success", nil
+}
+
+func SentPost(db *mongo.Database) (string, error) {
+	url := "https://api.wa.my.id/api/send/message/text"
+
+	// Data yang akan dikirimkan dalam format JSON
+	jsonStr := []byte(`{
+        "to": "6295156119352",
+        "isgroup": false,
+        "messages": "kode Otp akun trensentimen.my.id anda adalah *1234*"
+    }`)
+
+	// Membuat permintaan HTTP POST
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	if err != nil {
+		fmt.Println("Error creating request:", err)
+		return "", err
+	}
+
+	// Menambahkan header ke permintaan
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Token", "v4.public.eyJleHAiOiIyMDIzLTEyLTE2VDE3OjQ3OjQ3KzA3OjAwIiwiaWF0IjoiMjAyMy0xMS0xNlQxNzo0Nzo0NyswNzowMCIsImlkIjoiNjI4NTcwMzMwNTE2MyIsIm5iZiI6IjIwMjMtMTEtMTZUMTc6NDc6NDcrMDc6MDAifXlYzCjMwUnUHhdyWpcQyq33tOKlhJIWHzBr5Zq2PgmYxjeghbWqkS1QUH7ojfzPYd1fIaWOHnoE29zbE-v_tQk")
+	req.Header.Set("Content-Type", "application/json")
+
+	// Melakukan permintaan HTTP POST
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	// Menampilkan respons dari server
+	fmt.Println("Response Status:", resp.Status)
+	return "success", nil
 }

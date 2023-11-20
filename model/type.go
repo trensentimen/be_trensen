@@ -5,12 +5,12 @@ import (
 )
 
 type User struct {
-	ID       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
-	Name     string             `json:"name" bson:"name"`
-	Password string             `json:"password" bson:"password"`
-	Email    string             `json:"email" bson:"email"`
-	Role     string             `json:"role,omitempty" bson:"role,omitempty"`
-	NoHp     string             `json:"nohp,omitempty" bson:"nohp,omitempty"`
+	ID          primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	Name        string             `json:"name" bson:"name"`
+	Password    string             `json:"password" bson:"password"`
+	Email       string             `json:"email" bson:"email"`
+	Role        string             `json:"role,omitempty" bson:"role,omitempty"`
+	PhoneNumber string             `json:"phonenumber,omitempty" bson:"phonenumber,omitempty"`
 }
 
 type Credential struct {
