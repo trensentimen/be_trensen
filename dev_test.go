@@ -203,10 +203,7 @@ func TestSendOTP(t *testing.T) {
 
 func TestCekOTP(t *testing.T) {
 	var email = "email@gmail.com"
-	otp := "2462"
-	var expiredAt = module.GenerateExpiredAt()
-	fmt.Println(otp)
-	fmt.Println(expiredAt)
+	otp := "6453"
 	otp, err := module.CheckOTP(db, email, otp)
 	if err != nil {
 		fmt.Println("Error sending otp: ", err)

@@ -316,6 +316,7 @@ func SendOTP(db *mongo.Database, email string) (string, error) {
 		"email":     email,
 		"otp":       otp,
 		"expiredat": expiredAt,
+		"status":    false,
 	}
 
 	// get otp by email
