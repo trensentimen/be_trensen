@@ -290,25 +290,21 @@ func GCFHandlerResetPassword(MONGOCONNSTRINGENV, dbname, collectionname string, 
 	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
 	var Response model.Response
 	Response.Status = false
-	var dataUser model.User
-	var dataOTP model.Otp
-	err := json.NewDecoder(r.Body).Decode(&dataUser)
+	var data model.ResetPassword
+
+	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		Response.Message = "error parsing application/json: " + err.Error()
 		return GCFReturnStruct(Response)
 	}
-	err = json.NewDecoder(r.Body).Decode(&dataOTP)
-	if err != nil {
-		Response.Message = "error parsing application/json: " + err.Error()
-		return GCFReturnStruct(Response)
-	}
-	_, err = ResetPassword(conn, dataUser.Email, dataOTP.OTP, dataUser.Password)
+
+	_, err = ResetPassword(conn, data.Email, data.OTP, data.Password)
 	if err != nil {
 		Response.Message = err.Error()
 		return GCFReturnStruct(Response)
 	}
 	Response.Status = true
-	Response.Message = "msg " + dataUser.Email
+	Response.Message = "Berhasil, Silahkan Kembali ke Login " + data.Email
 	return GCFReturnStruct(Response)
 }
 

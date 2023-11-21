@@ -50,3 +50,9 @@ type Response struct {
 	Status  bool   `json:"status" bson:"status"`
 	Message string `json:"message,omitempty" bson:"message,omitempty"`
 }
+
+type ResetPassword struct {
+	Email    string `json:"email" bson:"email"`
+	OTP      string `json:"otp" bson:"otp"`
+	Password string `json:"password" bson:"password"`
+}
