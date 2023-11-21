@@ -223,3 +223,18 @@ func TestUpdatePassword(t *testing.T) {
 		fmt.Println("Data berhasil dikirim :", message)
 	}
 }
+
+func TestValidatePhoneNumber(t *testing.T) {
+	phoneNumber := "62812345690"
+	isValid, err := module.ValidatePhoneNumber(phoneNumber)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	if isValid {
+		fmt.Println("Phone number is valid.")
+	} else {
+		fmt.Println("Phone number is not valid.")
+	}
+}

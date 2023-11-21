@@ -12,6 +12,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 
@@ -35,6 +36,35 @@ func MongoConnect(MongoString, dbname string) *mongo.Database {
 		fmt.Printf("MongoConnect: %v\n", err)
 	}
 	return client.Database(dbname)
+}
+
+func ValidatePhoneNumber(phoneNumber string) (bool, error) {
+	// Define the regular expression pattern for numeric characters
+	numericPattern := `^[0-9]+$`
+
+	// Compile the numeric pattern
+	numericRegexp, err := regexp.Compile(numericPattern)
+	if err != nil {
+		return false, err
+	}
+	// Check if the phone number consists only of numeric characters
+	if !numericRegexp.MatchString(phoneNumber) {
+		return false, nil
+	}
+
+	// Define the regular expression pattern for "62" followed by 6 to 12 digits
+	pattern := `^62\d{6,13}$`
+
+	// Compile the regular expression
+	regexpPattern, err := regexp.Compile(pattern)
+	if err != nil {
+		return false, err
+	}
+
+	// Test if the phone number matches the pattern
+	isValid := regexpPattern.MatchString(phoneNumber)
+
+	return isValid, nil
 }
 
 func GetAllDocs(db *mongo.Database, col string, docs interface{}) interface{} {
@@ -105,8 +135,12 @@ func DeleteOneDoc(_id primitive.ObjectID, db *mongo.Database, col string) error 
 func SignUp(db *mongo.Database, col string, insertedDoc model.User) error {
 	objectId := primitive.NewObjectID()
 
-	if insertedDoc.Name == "" || insertedDoc.Email == "" || insertedDoc.Password == "" {
+	if insertedDoc.Name == "" || insertedDoc.Email == "" || insertedDoc.Password == "" || insertedDoc.PhoneNumber == "" {
 		return fmt.Errorf("mohon untuk melengkapi data")
+	}
+	valid, _ := ValidatePhoneNumber(insertedDoc.PhoneNumber)
+	if !valid {
+		return fmt.Errorf("nomor telepon tidak valid")
 	}
 	if err := checkmail.ValidateFormat(insertedDoc.Email); err != nil {
 		return fmt.Errorf("email tidak valid")
@@ -351,7 +385,7 @@ func SendOTP(db *mongo.Database, email string) (string, error) {
 	jsonStr := []byte(`{
         "to": "` + existsDoc.PhoneNumber + `",
         "isgroup": false,
-        "messages": "kode Otp akun trensentimen.my.id anda adalah *` + otp + `*"
+        "messages": "kode Otp akun trensentimen.my.id atas nama *` + email + `* adalah *` + otp + `*"
     }`)
 
 	// Membuat permintaan HTTP POST
