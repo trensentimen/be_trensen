@@ -159,10 +159,12 @@ func SignUp(db *mongo.Database, col string, insertedDoc model.User) error {
 	hash, _ := HashPassword(insertedDoc.Password)
 	// insertedDoc.Password = hash
 	user := bson.M{
-		"_id":      objectId,
-		"email":    insertedDoc.Email,
-		"password": hash,
-		"role":     "user",
+		"_id":         objectId,
+		"email":       insertedDoc.Email,
+		"password":    hash,
+		"role":        "user",
+		"name":        insertedDoc.Name,
+		"phonenumber": insertedDoc.PhoneNumber,
 	}
 	_, err := InsertOneDoc(db, col, user)
 	if err != nil {
