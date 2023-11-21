@@ -45,3 +45,8 @@ type Otp struct {
 	ExpiredAt int64              `json:"expiredat" bson:"expiredat"`
 	Status    bool               `json:"status" bson:"status"`
 }
+
+type Response struct {
+	Status  bool   `json:"status" bson:"status"`
+	Message string `json:"message,omitempty" bson:"message,omitempty"`
+}

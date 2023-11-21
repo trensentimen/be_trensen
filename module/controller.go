@@ -380,7 +380,7 @@ func SendOTP(db *mongo.Database, email string) (string, error) {
 	return "success", nil
 }
 
-func CheckOTP(db *mongo.Database, email, otp string) (string, error) {
+func VerifyOTP(db *mongo.Database, email, otp string) (string, error) {
 	// get otp by email
 	otpDoc, err := GetOTPbyEmail(email, db)
 	if err != nil {
@@ -407,4 +407,45 @@ func CheckOTP(db *mongo.Database, email, otp string) (string, error) {
 	}
 
 	return otp, nil
+}
+
+func ResetPassword(db *mongo.Database, email, otp, password string) (string, error) {
+	// get user by email
+	existsDoc, err := GetUserFromEmail(email, db)
+	if err != nil {
+		return "", fmt.Errorf("email tidak ditemukan1")
+	}
+	if existsDoc.Email == "" {
+		return "", fmt.Errorf("email tidak ditemukan2")
+	}
+
+	// check otp
+	docOtp, err := GetOTPbyEmail(email, db)
+	if err != nil {
+		return "", fmt.Errorf("error Get OTP: %s", err.Error())
+	}
+	if docOtp.OTP != otp || !docOtp.Status {
+		return "", fmt.Errorf("otp tidak valid")
+	}
+
+	// hash password
+	hash, _ := HashPassword(password)
+
+	// update password
+	filter := bson.M{"email": email}
+	update := bson.M{"$set": bson.M{"password": hash}}
+	_, err = db.Collection("user").UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		return "", fmt.Errorf("error updating password: %s", err.Error())
+	}
+
+	// update otp
+	filter = bson.M{"email": email}
+	update = bson.M{"$set": bson.M{"status": false}}
+	_, err = db.Collection("otp").UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		return "", fmt.Errorf("error updating password: %s", err.Error())
+	}
+
+	return "success", nil
 }

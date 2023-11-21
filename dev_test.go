@@ -204,10 +204,22 @@ func TestSendOTP(t *testing.T) {
 func TestCekOTP(t *testing.T) {
 	var email = "email@gmail.com"
 	otp := "6453"
-	otp, err := module.CheckOTP(db, email, otp)
+	otp, err := module.VerifyOTP(db, email, otp)
 	if err != nil {
 		fmt.Println("Error sending otp: ", err)
 	} else {
 		fmt.Println("Data berhasil dikirim :", otp)
+	}
+}
+
+func TestUpdatePassword(t *testing.T) {
+	var email = "email@gmail.com"
+	otp := "6453"
+	password := "daniaw"
+	message, err := module.ResetPassword(db, email, otp, password)
+	if err != nil {
+		fmt.Println("Error sending otp: ", err)
+	} else {
+		fmt.Println("Data berhasil dikirim :", message)
 	}
 }
