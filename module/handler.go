@@ -246,7 +246,7 @@ func GCFHandlerDeleteTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collecti
 	return GCFReturnStruct(Response)
 }
 
-func GCFHandlerSendOTP(PASETOPRIVATEKEYENV, MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
+func GCFHandlerSendOTP(MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
 	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
 	var Response model.Response
 	Response.Status = false
@@ -266,7 +266,7 @@ func GCFHandlerSendOTP(PASETOPRIVATEKEYENV, MONGOCONNSTRINGENV, dbname, collecti
 	return GCFReturnStruct(Response)
 }
 
-func GCFHandlerVerifyOTP(PASETOPRIVATEKEYENV, MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
+func GCFHandlerVerifyOTP(MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
 	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
 	var Response model.Response
 	Response.Status = false
@@ -286,7 +286,7 @@ func GCFHandlerVerifyOTP(PASETOPRIVATEKEYENV, MONGOCONNSTRINGENV, dbname, collec
 	return GCFReturnStruct(Response)
 }
 
-func GCFHandlerResetPassword(PASETOPRIVATEKEYENV, MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
+func GCFHandlerResetPassword(MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
 	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
 	var Response model.Response
 	Response.Status = false
