@@ -486,20 +486,55 @@ func ResetPassword(db *mongo.Database, email, otp, password string) (string, err
 	return "success", nil
 }
 
+func InsertManyDocs(db *mongo.Database, col string, dataTopics []model.DataTopics) (insertedIDs []primitive.ObjectID, err error) {
+	var interfaces []interface{}
+	for _, topic := range dataTopics {
+		interfaces = append(interfaces, topic)
+	}
+	result, err := db.Collection(col).InsertMany(context.Background(), interfaces)
+	if err != nil {
+		return insertedIDs, fmt.Errorf("kesalahan server: insert")
+	}
+	for _, id := range result.InsertedIDs {
+		insertedIDs = append(insertedIDs, id.(primitive.ObjectID))
+	}
+	return insertedIDs, nil
+}
+
 func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopics, err error) {
 
-	dataTopics, err := CrawlingTweet(topic)
-	if err != nil {
-		return docs, fmt.Errorf("error CrawlingTweet: %s", err.Error())
+	if topic.Source.Source == "youtube" {
+		return docs, fmt.Errorf("fitur sedang dikembangkan")
+		// docs, err = CrawlingYoutube(topic)
+		// if err != nil {
+		// 	return docs, fmt.Errorf("error CrawlingYoutube: %s", err.Error())
+		// }
+	} else if topic.Source.Source == "twitter" {
+		docs, err = CrawlingTweet(topic)
+		if err != nil {
+			return docs, fmt.Errorf("error CrawlingTweet: %s", err.Error())
+		}
+	} else {
+		return docs, fmt.Errorf("source tidak ditemukan")
 	}
 
+	// dataTopics, err := CrawlingTweet(topic)
+	// if err != nil {
+	// 	return docs, fmt.Errorf("error CrawlingTweet: %s", err.Error())
+	// }
+
 	// insert data to db
-	for _, data := range dataTopics {
-		_, err = InsertOneDoc(db, "datatopics", data)
-		if err != nil {
-			return docs, fmt.Errorf("error insert data: %s", err.Error())
-		}
+	_, err = InsertManyDocs(db, "datatopics", docs)
+	if err != nil {
+		return docs, fmt.Errorf("error insert data: %s", err.Error())
 	}
+
+	// for _, data := range dataTopics {
+	// 	_, err = InsertOneDoc(db, "datatopics", data)
+	// 	if err != nil {
+	// 		return docs, fmt.Errorf("error insert data: %s", err.Error())
+	// 	}
+	// }
 
 	return docs, nil
 }
