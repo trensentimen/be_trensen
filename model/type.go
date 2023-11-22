@@ -26,6 +26,13 @@ type Topic struct {
 	Status    string             `json:"status" bson:"status"` // done/pending
 }
 
+type DataTopics struct {
+	ID       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	TopicId  primitive.ObjectID `json:"topicid" bson:"topicid"`
+	Message  string             `json:"message" bson:"message"`
+	Sentimen string             `json:"sentimen" bson:"sentimen"` // positive/negative/neutral
+}
+
 type TopicResponse struct {
 	Status  bool    `json:"status" bson:"status"`
 	Message string  `json:"message,omitempty" bson:"message,omitempty"`

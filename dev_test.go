@@ -238,3 +238,7 @@ func TestValidatePhoneNumber(t *testing.T) {
 		fmt.Println("Phone number is not valid.")
 	}
 }
+
+func TestCrawlingTweet(t *testing.T) {
+	module.CrawlingTweet()
+}
