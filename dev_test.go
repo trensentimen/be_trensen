@@ -239,6 +239,15 @@ func TestValidatePhoneNumber(t *testing.T) {
 	}
 }
 
-func TestCrawlingTweet(t *testing.T) {
-	module.CrawlingTweet()
+func TestScrapSentimen(t *testing.T) {
+	topic := model.Topic{
+		TopicName: "dani",
+		Source: model.Sources{
+			Source:    "twitter",
+			Value:     "jokiwi",
+			DateRange: "2021/01/01-2021/01/31",
+		},
+	}
+
+	module.ScrapSentimen(db, topic)
 }

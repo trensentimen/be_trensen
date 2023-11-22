@@ -28,9 +28,11 @@ type Topic struct {
 
 type DataTopics struct {
 	ID       primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
-	TopicId  primitive.ObjectID `json:"topicid" bson:"topicid"`
-	Message  string             `json:"message" bson:"message"`
+	TopicId  primitive.ObjectID `json:"topicid,omitempty" bson:"topicid,omitempty"`
+	Text     string             `json:"text" bson:"text"`
 	Sentimen string             `json:"sentimen" bson:"sentimen"` // positive/negative/neutral
+	Source   string             `json:"source" bson:"source"`     // youtube/twitter
+	Date     int64              `json:"date" bson:"date"`
 }
 
 type TopicResponse struct {

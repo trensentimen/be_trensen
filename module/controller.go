@@ -485,3 +485,21 @@ func ResetPassword(db *mongo.Database, email, otp, password string) (string, err
 
 	return "success", nil
 }
+
+func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopics, err error) {
+
+	dataTopics, err := CrawlingTweet(topic)
+	if err != nil {
+		return docs, fmt.Errorf("error CrawlingTweet: %s", err.Error())
+	}
+
+	// insert data to db
+	for _, data := range dataTopics {
+		_, err = InsertOneDoc(db, "datatopics", data)
+		if err != nil {
+			return docs, fmt.Errorf("error insert data: %s", err.Error())
+		}
+	}
+
+	return docs, nil
+}
