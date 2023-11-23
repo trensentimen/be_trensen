@@ -308,6 +308,26 @@ func GCFHandlerResetPassword(MONGOCONNSTRINGENV, dbname, collectionname string, 
 	return GCFReturnStruct(Response)
 }
 
+func GCFHandlerScraping(MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
+	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
+	var Response model.Response
+	Response.Status = false
+	var dataTopic model.Topic
+	err := json.NewDecoder(r.Body).Decode(&dataTopic)
+	if err != nil {
+		Response.Message = "error parsing application/json: " + err.Error()
+		return GCFReturnStruct(Response)
+	}
+	_, err = ScrapSentimen(conn, dataTopic)
+	if err != nil {
+		Response.Message = err.Error()
+		return GCFReturnStruct(Response)
+	}
+	Response.Status = true
+	Response.Message = "Scraping Berhasil"
+	return GCFReturnStruct(Response)
+}
+
 func GCFReturnStruct(DataStuct any) string {
 	jsondata, _ := json.Marshal(DataStuct)
 	return string(jsondata)

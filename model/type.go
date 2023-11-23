@@ -23,7 +23,7 @@ type Topic struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
 	TopicName string             `json:"topicname" bson:"topicname"`
 	Source    Sources            `json:"source" bson:"source"`
-	Status    string             `json:"status" bson:"status"` // done/pending
+	Status    string             `json:"status" bson:"status"` // Drafting, Inputting, Analyzing
 }
 
 type DataTopics struct {
