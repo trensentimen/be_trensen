@@ -240,7 +240,9 @@ func TestValidatePhoneNumber(t *testing.T) {
 }
 
 func TestScrapSentimen(t *testing.T) {
+	id, _ := primitive.ObjectIDFromHex("6549bae758638dd4f0137a11")
 	topic := model.Topic{
+		ID:        id,
 		TopicName: "lagu",
 		Source: model.Sources{
 			Source:    "youtube",
