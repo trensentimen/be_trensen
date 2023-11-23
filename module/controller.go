@@ -142,6 +142,10 @@ func SignUp(db *mongo.Database, col string, insertedDoc model.User) error {
 	if !valid {
 		return fmt.Errorf("nomor telepon tidak valid")
 	}
+	// phoneNumberExists, _ := GetUserFromPhoneNumber(insertedDoc.PhoneNumber, db)
+	// if insertedDoc.PhoneNumber == phoneNumberExists.PhoneNumber {
+	// 	return fmt.Errorf("nomor telepon sudah terdaftar")
+	// }
 	if err := checkmail.ValidateFormat(insertedDoc.Email); err != nil {
 		return fmt.Errorf("email tidak valid")
 	}
@@ -217,7 +221,21 @@ func GetUserFromEmail(email string, db *mongo.Database) (doc model.User, err err
 	return doc, nil
 }
 
+func GetUserFromPhoneNumber(phoneNumber string, db *mongo.Database) (doc model.User, err error) {
+	collection := db.Collection("user")
+	filter := bson.M{"phoneNumber": phoneNumber}
+	err = collection.FindOne(context.TODO(), filter).Decode(&doc)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return doc, fmt.Errorf("email tidak ditemukan")
+		}
+		return doc, fmt.Errorf("kesalahan server")
+	}
+	return doc, nil
+}
+
 func AddTopic(db *mongo.Database, doc model.Topic) (insertedID primitive.ObjectID, err error) {
+	doc.Status = "drafting"
 	result, err := db.Collection("topic").InsertOne(context.Background(), doc)
 	if err != nil {
 		return insertedID, fmt.Errorf("kesalahan server : insert")
@@ -517,23 +535,18 @@ func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopi
 		return docs, fmt.Errorf("source tidak ditemukan")
 	}
 
-	// dataTopics, err := CrawlingTweet(topic)
-	// if err != nil {
-	// 	return docs, fmt.Errorf("error CrawlingTweet: %s", err.Error())
-	// }
-
 	// insert data to db
 	_, err = InsertManyDocs(db, "datatopics", docs)
 	if err != nil {
 		return docs, fmt.Errorf("error insert data: %s", err.Error())
 	}
 
-	// for _, data := range dataTopics {
-	// 	_, err = InsertOneDoc(db, "datatopics", data)
-	// 	if err != nil {
-	// 		return docs, fmt.Errorf("error insert data: %s", err.Error())
-	// 	}
-	// }
+	// update topic status
+	topic.Status = "inputting"
+	err = UpdateTopic(db, topic)
+	if err != nil {
+		return docs, fmt.Errorf("error update topic: %s", err.Error())
+	}
 
 	return docs, nil
 }
