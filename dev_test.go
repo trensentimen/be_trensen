@@ -241,11 +241,11 @@ func TestValidatePhoneNumber(t *testing.T) {
 
 func TestScrapSentimen(t *testing.T) {
 	topic := model.Topic{
-		TopicName: "dani",
+		TopicName: "lagu",
 		Source: model.Sources{
-			Source:    "twitter",
-			Value:     "Ditio",
-			DateRange: "2021/01/01-2021/01/31",
+			Source:    "youtube",
+			Value:     "FD2sUO3ql8k",
+			DateRange: "",
 		},
 	}
 

@@ -504,11 +504,10 @@ func InsertManyDocs(db *mongo.Database, col string, dataTopics []model.DataTopic
 func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopics, err error) {
 
 	if topic.Source.Source == "youtube" {
-		return docs, fmt.Errorf("fitur sedang dikembangkan")
-		// docs, err = CrawlingYoutube(topic)
-		// if err != nil {
-		// 	return docs, fmt.Errorf("error CrawlingYoutube: %s", err.Error())
-		// }
+		docs, err = CrawlingYoutube(topic)
+		if err != nil {
+			return docs, fmt.Errorf("error CrawlingYoutube: %s", err.Error())
+		}
 	} else if topic.Source.Source == "twitter" {
 		docs, err = CrawlingTweet(topic)
 		if err != nil {
