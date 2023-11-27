@@ -66,9 +66,27 @@ type ResetPassword struct {
 	Password string `json:"password" bson:"password"`
 }
 
+// type Setting struct {
+// 	ID          primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+// 	SettingName string             `json:"settingname" bson:"settingname"`
+// 	SettingType string             `json:"settingtype" bson:"settingtype"`
+// 	Setting     string             `json:"setting" bson:"setting"`
+// }
+
 type Setting struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
-	SettingName string             `json:"settingname" bson:"settingname"`
-	SettingType string             `json:"settingtype" bson:"settingtype"`
-	Setting     string             `json:"setting" bson:"setting"`
+	ID primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	// UserID     primitive.ObjectID `bson:"userid,omitempty" json:"userid,omitempty"`
+	MaxTweeter int     `json:"maxtweet" bson:"maxtweet"`
+	MaxYoutube int     `json:"maxyoutube" bson:"maxyoutube"`
+	Twitter    Twitter `json:"twitter" bson:"twitter"`
+	Youtube    Youtube `json:"youtube" bson:"youtube"`
+}
+
+type Twitter struct {
+	UserName string `json:"username" bson:"username"`
+	Password string `json:"password" bson:"password"`
+}
+
+type Youtube struct {
+	ApiKey string `json:"apikey" bson:"apikey"`
 }

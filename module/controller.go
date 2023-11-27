@@ -560,3 +560,63 @@ func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopi
 
 	return docs, nil
 }
+
+func AddSetting(db *mongo.Database, doc model.Setting) (insertedID primitive.ObjectID, err error) {
+	result, err := db.Collection("settings").InsertOne(context.Background(), doc)
+	if err != nil {
+		return insertedID, fmt.Errorf("kesalahan server : insert")
+	}
+	insertedID = result.InsertedID.(primitive.ObjectID)
+	return insertedID, nil
+}
+
+func GetAllSetting(db *mongo.Database) (docs []model.Setting, err error) {
+	collection := db.Collection("settings")
+	filter := bson.M{}
+	cursor, err := collection.Find(context.Background(), filter)
+	if err != nil {
+		return docs, fmt.Errorf("kesalahan server")
+	}
+	err = cursor.All(context.Background(), &docs)
+	if err != nil {
+		return docs, fmt.Errorf("kesalahan server")
+	}
+	return docs, nil
+}
+
+func DeleteSetting(db *mongo.Database, doc model.Setting) error {
+	collection := db.Collection("settings")
+	filter := bson.M{"_id": doc.ID}
+	_, err := collection.DeleteOne(context.Background(), filter)
+	if err != nil {
+		return fmt.Errorf("error deleting data for ID %s: %s", doc.ID, err.Error())
+	}
+	return nil
+}
+
+func GetSetting(db *mongo.Database, setting model.Setting) (doc model.Setting, err error) {
+	collection := db.Collection("settings")
+	filter := bson.M{"_id": setting.ID}
+	err = collection.FindOne(context.Background(), filter).Decode(&doc)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return doc, fmt.Errorf("no data found")
+		}
+		return doc, fmt.Errorf("error retrieving data: %s", err.Error())
+	}
+	return doc, nil
+}
+
+func UpdateSetting(db *mongo.Database, doc model.Setting) (err error) {
+	filter := bson.M{"_id": doc.ID}
+	result, err := db.Collection("settings").UpdateOne(context.Background(), filter, bson.M{"$set": doc})
+	if err != nil {
+		fmt.Printf("UpdateSetting: %v\n", err)
+		return
+	}
+	if result.ModifiedCount == 0 {
+		err = errors.New("no data has been changed with the specified id")
+		return
+	}
+	return nil
+}

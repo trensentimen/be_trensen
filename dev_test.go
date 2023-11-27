@@ -247,3 +247,82 @@ func TestScrapSentimen(t *testing.T) {
 
 	module.ScrapSentimen(db, topic)
 }
+
+func TestAddSetting(t *testing.T) {
+	var doc model.Setting
+	doc.ID = primitive.NewObjectID()
+	doc.MaxTweeter = 100
+	doc.MaxYoutube = 100
+	doc.Twitter.UserName = "dani"
+	doc.Twitter.Password = "dani"
+	doc.Youtube.ApiKey = "dani"
+	// doc.UserID = primitive.NewObjectID()
+
+	_, err := module.AddSetting(db, doc)
+	if err != nil {
+		t.Errorf("Error inserting document: %v", err)
+	} else {
+		fmt.Println("Data berhasil disimpan dengan id :", doc.ID)
+	}
+}
+
+func TestUpdateSetting(t *testing.T) {
+	var doc model.Setting
+	_id, err := primitive.ObjectIDFromHex("65644d6f66dc320b7b26f5e8")
+	if err != nil {
+		t.Errorf("Error inserting document: %v", err)
+	}
+	doc.ID = _id
+	doc.MaxTweeter = 100
+	doc.MaxYoutube = 100
+	doc.Twitter.UserName = "dani"
+	doc.Twitter.Password = "dani"
+	doc.Youtube.ApiKey = "dani"
+	err = module.UpdateSetting(db, doc)
+	if err != nil {
+		t.Errorf("Error updating document: %v", err)
+	} else {
+		fmt.Println("Data berhasil dirubah dengan id :", doc.ID)
+	}
+}
+
+func TestGetSetting(t *testing.T) {
+	var doc model.Setting
+	_id, err := primitive.ObjectIDFromHex("65644d6f66dc320b7b26f5e8")
+	if err != nil {
+		t.Errorf("Error inserting document: %v", err)
+	}
+	doc.ID = _id
+	setting, err := module.GetSetting(db, doc)
+	if err != nil {
+		t.Errorf("Error inserting document: %v", err)
+	} else {
+		fmt.Println("Data berhasil disimpan dengan id :", setting)
+	}
+}
+
+func TestGetAllSetting(t *testing.T) {
+	var docs []model.Setting
+	docs, err := module.GetAllSetting(db)
+	if err != nil {
+		t.Errorf("Error inserting document: %v", err)
+	} else {
+		fmt.Println("Data berhasil disimpan dengan id :", docs)
+	}
+	fmt.Println(docs)
+}
+
+func TestDeleteSetting(t *testing.T) {
+	var doc model.Setting
+	_id, err := primitive.ObjectIDFromHex("65644d6f66dc320b7b26f5e8")
+	if err != nil {
+		t.Errorf("Error inserting document: %v", err)
+	}
+	doc.ID = _id
+	err = module.DeleteSetting(db, doc)
+	if err != nil {
+		t.Errorf("Error deleting document: %v", err)
+	} else {
+		fmt.Println("Data berhasil dihapus dengan id :", doc.ID)
+	}
+}
