@@ -527,7 +527,7 @@ func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopi
 		return docs, fmt.Errorf("error GetTopic: %s", err.Error())
 	}
 
-	if topic.Status != "inputting" {
+	if topic.Status != "drafting" {
 		return docs, fmt.Errorf("topic sudah diinput")
 	}
 
