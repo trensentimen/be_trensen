@@ -245,8 +245,8 @@ func TestScrapSentimen(t *testing.T) {
 		ID:        id,
 		TopicName: "lagu",
 		Source: model.Sources{
-			Source:    "youtube",
-			Value:     "FD2sUO3ql8k",
+			Source:    "twitter",
+			Value:     "pilpres",
 			DateRange: "",
 		},
 	}
