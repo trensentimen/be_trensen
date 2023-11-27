@@ -521,6 +521,16 @@ func InsertManyDocs(db *mongo.Database, col string, dataTopics []model.DataTopic
 
 func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopics, err error) {
 
+	// get data topic from id
+	topic, err = GetTopic(topic.ID, db)
+	if err != nil {
+		return docs, fmt.Errorf("error GetTopic: %s", err.Error())
+	}
+
+	if topic.Status != "inputting" {
+		return docs, fmt.Errorf("topic sudah diinput")
+	}
+
 	if topic.Source.Source == "youtube" {
 		docs, err = CrawlingYoutube(topic)
 		if err != nil {

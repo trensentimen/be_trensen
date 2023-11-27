@@ -65,3 +65,10 @@ type ResetPassword struct {
 	OTP      string `json:"otp" bson:"otp"`
 	Password string `json:"password" bson:"password"`
 }
+
+type Setting struct {
+	ID          primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	SettingName string             `json:"settingname" bson:"settingname"`
+	SettingType string             `json:"settingtype" bson:"settingtype"`
+	Setting     string             `json:"setting" bson:"setting"`
+}
