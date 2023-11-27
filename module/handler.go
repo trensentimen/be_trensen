@@ -306,10 +306,27 @@ func GCFHandlerResetPassword(MONGOCONNSTRINGENV, dbname, collectionname string, 
 	return GCFReturnStruct(Response)
 }
 
-func GCFHandlerScraping(MONGOCONNSTRINGENV, dbname, collectionname string, r *http.Request) string {
+func GCFHandlerScraping(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname string, r *http.Request) string {
 	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
 	var Response model.Response
 	Response.Status = false
+
+	// get token from header
+	token := r.Header.Get("Authorization")
+	token = strings.TrimPrefix(token, "Bearer ")
+	if token == "" {
+		Response.Message = "error parsing application/json1:"
+		return GCFReturnStruct(Response)
+	}
+
+	// decode token
+	_, err1 := watoken.Decode(os.Getenv(PASETOPUBLICKEY), token)
+
+	if err1 != nil {
+		Response.Message = "error parsing application/json2: " + err1.Error() + ";" + token
+		return GCFReturnStruct(Response)
+	}
+
 	var dataTopic model.Topic
 	err := json.NewDecoder(r.Body).Decode(&dataTopic)
 	if err != nil {
