@@ -244,8 +244,12 @@ func TestScrapSentimen(t *testing.T) {
 	topic := model.Topic{
 		ID: id,
 	}
-
-	module.ScrapSentimen(db, topic)
+	docs, err := module.CrawlingTweet(topic)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	fmt.Println(docs)
 }
 
 func TestAddSetting(t *testing.T) {

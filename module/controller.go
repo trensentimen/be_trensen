@@ -537,10 +537,11 @@ func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopi
 			return docs, fmt.Errorf("error CrawlingYoutube: %s", err.Error())
 		}
 	} else if topic.Source.Source == "twitter" {
-		docs, err = CrawlingTweet2(topic)
-		if err != nil {
-			return docs, fmt.Errorf("error CrawlingTweet: %s", err.Error())
-		}
+		return docs, fmt.Errorf("source twitter belum tersedia")
+		// docs, err = CrawlingTweet(topic)
+		// if err != nil {
+		// 	return docs, fmt.Errorf("error CrawlingTweet: %s", err.Error())
+		// }
 	} else {
 		return docs, fmt.Errorf("source tidak ditemukan")
 	}

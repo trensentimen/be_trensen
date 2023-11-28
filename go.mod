@@ -4,6 +4,8 @@ go 1.21.3
 
 require (
 	github.com/badoux/checkmail v1.2.1
+	github.com/dghubble/go-twitter v0.0.0-20221104224141-912508c3888b
+	github.com/dghubble/oauth1 v0.7.2
 	github.com/n0madic/twitter-scraper v0.0.0-20231104223941-296710769dd8
 	github.com/whatsauth/watoken v0.1.2
 	go.mongodb.org/mongo-driver v1.12.1
@@ -15,15 +17,12 @@ require (
 	aidanwoods.dev/go-paseto v1.2.0 // indirect
 	cloud.google.com/go/compute v1.23.1 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
-	github.com/ChimeraCoder/anaconda v2.0.0+incompatible // indirect
-	github.com/ChimeraCoder/tokenbucket v0.0.0-20131201223612-c5a927568de7 // indirect
-	github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330 // indirect
-	github.com/dustin/go-jsonpointer v0.0.0-20160814072949-ba0abeacc3dc // indirect
-	github.com/dustin/gojson v0.0.0-20160307161227-2e71ec9dd5ad // indirect
-	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17 // indirect
+	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
+	github.com/dghubble/sling v1.4.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
