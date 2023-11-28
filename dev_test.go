@@ -66,8 +66,8 @@ func TestGetUserFromID(t *testing.T) {
 func TestAddTopic(t *testing.T) {
 	var doc model.Topic
 	doc.TopicName = "Erdito Nausha Adam2"
-	doc.Source.Source = "yutube"
-	doc.Source.Value = "https://twitter.com/erditonausha"
+	doc.Source.Source = "twitter"
+	doc.Source.Value = "jokowi"
 	// doc.Source.DateRange = "2021/01/01-2021/01/31"
 
 	_id, err := module.AddTopic(db, doc)
@@ -240,7 +240,7 @@ func TestValidatePhoneNumber(t *testing.T) {
 }
 
 func TestScrapSentimen(t *testing.T) {
-	id, _ := primitive.ObjectIDFromHex("6549bae758638dd4f0137a11")
+	id, _ := primitive.ObjectIDFromHex("65649f2757e16abfe434ce3e")
 	topic := model.Topic{
 		ID: id,
 	}
@@ -288,12 +288,13 @@ func TestUpdateSetting(t *testing.T) {
 
 func TestGetSetting(t *testing.T) {
 	var doc model.Setting
-	_id, err := primitive.ObjectIDFromHex("65644d6f66dc320b7b26f5e8")
+	_id, err := primitive.ObjectIDFromHex("656455b184d8d327072ba54b")
 	if err != nil {
 		t.Errorf("Error inserting document: %v", err)
 	}
 	doc.ID = _id
 	setting, err := module.GetSetting(db, doc)
+
 	if err != nil {
 		t.Errorf("Error inserting document: %v", err)
 	} else {

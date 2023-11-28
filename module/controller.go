@@ -545,6 +545,10 @@ func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopi
 		return docs, fmt.Errorf("source tidak ditemukan")
 	}
 
+	// cek data kosong atau tidak
+	if len(docs) == 0 {
+		return docs, fmt.Errorf("data tidak ditemukan")
+	}
 	// insert data to db
 	_, err = InsertManyDocs(db, "datatopics", docs)
 	if err != nil {
