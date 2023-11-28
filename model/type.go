@@ -1,6 +1,8 @@
 package betrens
 
 import (
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -89,4 +91,19 @@ type Twitter struct {
 
 type Youtube struct {
 	ApiKey string `json:"apikey" bson:"apikey"`
+}
+
+type Cookie struct {
+	Name       string      `json:"Name"`
+	Value      string      `json:"Value"`
+	Path       string      `json:"Path"`
+	Domain     string      `json:"Domain"`
+	Expires    time.Time   `json:"Expires"`
+	RawExpires string      `json:"RawExpires"`
+	MaxAge     int         `json:"MaxAge"`
+	Secure     bool        `json:"Secure"`
+	HttpOnly   bool        `json:"HttpOnly"`
+	SameSite   int         `json:"SameSite"`
+	Raw        string      `json:"Raw"`
+	Unparsed   interface{} `json:"Unparsed"`
 }

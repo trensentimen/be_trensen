@@ -1,1 +1,72 @@
-[{"Name":"personalization_id","Value":"v1_Vs7++NgN/9be2KsBoi95jA==","Path":"","Domain":"twitter.com","Expires":"0001-01-01T00:00:00Z","RawExpires":"","MaxAge":0,"Secure":false,"HttpOnly":false,"SameSite":0,"Raw":"","Unparsed":null},{"Name":"kdt","Value":"AtMZ4VVaDHZOA3mVylkqEVkk7QRuwZpw8Pt8E2YZ","Path":"","Domain":"twitter.com","Expires":"0001-01-01T00:00:00Z","RawExpires":"","MaxAge":0,"Secure":false,"HttpOnly":false,"SameSite":0,"Raw":"","Unparsed":null},{"Name":"twid","Value":"u=1727210544716029952","Path":"","Domain":"twitter.com","Expires":"0001-01-01T00:00:00Z","RawExpires":"","MaxAge":0,"Secure":false,"HttpOnly":false,"SameSite":0,"Raw":"","Unparsed":null},{"Name":"ct0","Value":"6ce3d926e26959723119930398f28774","Path":"","Domain":"twitter.com","Expires":"0001-01-01T00:00:00Z","RawExpires":"","MaxAge":0,"Secure":false,"HttpOnly":false,"SameSite":0,"Raw":"","Unparsed":null},{"Name":"auth_token","Value":"1b2ecc8fed39b837235174275c82ab6ff51b299f","Path":"","Domain":"twitter.com","Expires":"0001-01-01T00:00:00Z","RawExpires":"","MaxAge":0,"Secure":false,"HttpOnly":false,"SameSite":0,"Raw":"","Unparsed":null}]
+[
+    {
+        "Name": "personalization_id",
+        "Value": "v1_Vs7++NgN/9be2KsBoi95jA==",
+        "Path": "",
+        "Domain": "twitter.com",
+        "Expires": "0001-01-01T00:00:00Z",
+        "RawExpires": "",
+        "MaxAge": 0,
+        "Secure": false,
+        "HttpOnly": false,
+        "SameSite": 0,
+        "Raw": "",
+        "Unparsed": null
+    },
+    {
+        "Name": "kdt",
+        "Value": "AtMZ4VVaDHZOA3mVylkqEVkk7QRuwZpw8Pt8E2YZ",
+        "Path": "",
+        "Domain": "twitter.com",
+        "Expires": "0001-01-01T00:00:00Z",
+        "RawExpires": "",
+        "MaxAge": 0,
+        "Secure": false,
+        "HttpOnly": false,
+        "SameSite": 0,
+        "Raw": "",
+        "Unparsed": null
+    },
+    {
+        "Name": "twid",
+        "Value": "u=1727210544716029952",
+        "Path": "",
+        "Domain": "twitter.com",
+        "Expires": "0001-01-01T00:00:00Z",
+        "RawExpires": "",
+        "MaxAge": 0,
+        "Secure": false,
+        "HttpOnly": false,
+        "SameSite": 0,
+        "Raw": "",
+        "Unparsed": null
+    },
+    {
+        "Name": "ct0",
+        "Value": "6ce3d926e26959723119930398f28774",
+        "Path": "",
+        "Domain": "twitter.com",
+        "Expires": "0001-01-01T00:00:00Z",
+        "RawExpires": "",
+        "MaxAge": 0,
+        "Secure": false,
+        "HttpOnly": false,
+        "SameSite": 0,
+        "Raw": "",
+        "Unparsed": null
+    },
+    {
+        "Name": "auth_token",
+        "Value": "1b2ecc8fed39b837235174275c82ab6ff51b299f",
+        "Path": "",
+        "Domain": "twitter.com",
+        "Expires": "0001-01-01T00:00:00Z",
+        "RawExpires": "",
+        "MaxAge": 0,
+        "Secure": false,
+        "HttpOnly": false,
+        "SameSite": 0,
+        "Raw": "",
+        "Unparsed": null
+    }
+]
