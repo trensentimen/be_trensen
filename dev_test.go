@@ -80,16 +80,17 @@ func TestAddTopic(t *testing.T) {
 
 func TestGetTopic(t *testing.T) {
 	var doc model.Topic
-	id, err := primitive.ObjectIDFromHex("6549bae758638dd4f0137a11")
+	id, err := primitive.ObjectIDFromHex("65657e1a29b3bad8b2bbb8e3")
 	doc.ID = id
 	if err != nil {
 		t.Errorf("Error getting document: %v", err)
 	} else {
-		doc, err := module.GetTopic(doc.ID, db)
+		doc, _, err := module.GetTopic(doc.ID, db)
 		if err != nil {
 			t.Errorf("Error getting document: %v", err)
 		} else {
 			fmt.Println("Welcome bang:", doc)
+			// fmt.Println("Welcome bang:", docs)
 		}
 	}
 }

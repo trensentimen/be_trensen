@@ -244,17 +244,30 @@ func AddTopic(db *mongo.Database, doc model.Topic) (insertedID primitive.ObjectI
 	return insertedID, nil
 }
 
-func GetTopic(_id primitive.ObjectID, db *mongo.Database) (doc model.Topic, err error) {
+func GetTopic(_id primitive.ObjectID, db *mongo.Database) (doc model.Topic, dataTopics []model.DataTopics, err error) {
 	collection := db.Collection("topic")
 	filter := bson.M{"_id": _id}
 	err = collection.FindOne(context.Background(), filter).Decode(&doc)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return doc, fmt.Errorf("no data found for ID %s", _id)
+			return doc, dataTopics, fmt.Errorf("tidak ada data ditemukan untuk ID %s", _id)
 		}
-		return doc, fmt.Errorf("error retrieving data for ID %s: %s", _id, err.Error())
+		return doc, dataTopics, fmt.Errorf("kesalahan mengambil data untuk ID %s: %s", _id, err.Error())
 	}
-	return doc, nil
+	if doc.Status == "inputting" {
+		collection := db.Collection("datatopics")
+		filter := bson.M{"topicid": _id}
+		cursor, err := collection.Find(context.Background(), filter)
+		if err != nil {
+			return doc, dataTopics, fmt.Errorf("kesalahan server")
+		}
+		err = cursor.All(context.Background(), &dataTopics)
+		if err != nil {
+			return doc, dataTopics, fmt.Errorf("kesalahan server")
+		}
+
+	}
+	return doc, dataTopics, nil
 }
 
 func GetAllTopic(db *mongo.Database) (docs []model.Topic, err error) {
@@ -522,7 +535,7 @@ func InsertManyDocs(db *mongo.Database, col string, dataTopics []model.DataTopic
 func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopics, err error) {
 
 	// get data topic from id
-	topic, err = GetTopic(topic.ID, db)
+	topic, _, err = GetTopic(topic.ID, db)
 	if err != nil {
 		return docs, fmt.Errorf("error GetTopic: %s", err.Error())
 	}

@@ -85,7 +85,7 @@ func GCFHandlerGetTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collectionn
 		Response.Message = "error parsing application/json3: " + err.Error()
 		return GCFReturnStruct(Response)
 	}
-	topic, err := GetTopic(dataUser.ID, conn)
+	topic, docDataTopics, err := GetTopic(dataUser.ID, conn)
 	if err != nil {
 		Response.Message = "error parsing application/json4: " + err.Error()
 		return GCFReturnStruct(Response)
@@ -93,6 +93,7 @@ func GCFHandlerGetTopic(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname, collectionn
 	Response.Status = true
 	Response.Message = "Selamat Datang " + dataUser.Email
 	Response.Data = []model.Topic{topic}
+	Response.DataTopics = docDataTopics
 	return GCFReturnStruct(Response)
 }
 
