@@ -545,16 +545,18 @@ func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopi
 	}
 
 	if topic.Source.Source == "youtube" {
-		docs, errM, err := CrawlingYoutube(topic)
+		docsDataTopic, errM, err := CrawlingYoutube(topic)
 		if err != nil {
 			return docs, fmt.Errorf("error CrawlingYoutube: %s: %w", errM, err)
 		}
+		docs = append(docs, docsDataTopic...)
 	} else if topic.Source.Source == "twitter" {
 		return docs, fmt.Errorf("source twitter belum tersedia")
-		// docs, err = CrawlingTweet(topic)
+		// docsDataTopic, err = CrawlingTweet(topic)
 		// if err != nil {
 		// 	return docs, fmt.Errorf("error CrawlingTweet: %s", err.Error())
 		// }
+		// docs = append(docs, docsDataTopic...)
 	} else {
 		return docs, fmt.Errorf("source tidak ditemukan")
 	}

@@ -92,7 +92,7 @@ func CrawlingYoutube(topic model.Topic) (dataTopic []model.DataTopics, errM stri
 		publishedAtStr := item.Snippet.TopLevelComment.Snippet.PublishedAt
 		publishedAt, err := time.Parse(time.RFC3339, publishedAtStr)
 		if err != nil {
-			panic(err)
+			return nil, "Server Bermasalah", err
 		}
 		unixTimestamp := publishedAt.Unix()
 		data := model.DataTopics{
@@ -104,7 +104,7 @@ func CrawlingYoutube(topic model.Topic) (dataTopic []model.DataTopics, errM stri
 		}
 		dataTopic = append(dataTopic, data)
 		// Process or store the extracted comment data
-		fmt.Println(commentText) // Print the comment text for demonstration
+		// fmt.Println(commentText) // Print the comment text for demonstration
 	}
 
 	return dataTopic, "", err

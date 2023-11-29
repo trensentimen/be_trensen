@@ -241,16 +241,16 @@ func TestValidatePhoneNumber(t *testing.T) {
 }
 
 func TestScrapSentimen(t *testing.T) {
-	id, _ := primitive.ObjectIDFromHex("65649f2757e16abfe434ce3e")
+	id, _ := primitive.ObjectIDFromHex("6566fa4d094a7eed963dd28f")
 	topic := model.Topic{
 		ID: id,
 	}
-	docs, err := module.CrawlingTweet(topic)
+	_, err := module.ScrapSentimen(db, topic)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
-	fmt.Println(docs)
+	// fmt.Println(docs)
 }
 
 func TestAddSetting(t *testing.T) {
