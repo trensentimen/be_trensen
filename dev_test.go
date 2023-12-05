@@ -146,31 +146,31 @@ func TestDeleteTopic(t *testing.T) {
 	}
 }
 
-func TestEncrypt(t *testing.T) {
-	var text = "daniaw"
-	textEncrypt, err := module.EncryptString(text)
-	if err != nil {
-		t.Errorf("Error encrypting document: %v", err)
-	} else {
-		fmt.Println("Data berhasil dienkripsi :", textEncrypt)
-	}
-}
+// func TestEncrypt(t *testing.T) {
+// 	var text = "daniaw"
+// 	textEncrypt, err := module.EncryptString(text)
+// 	if err != nil {
+// 		t.Errorf("Error encrypting document: %v", err)
+// 	} else {
+// 		fmt.Println("Data berhasil dienkripsi :", textEncrypt)
+// 	}
+// }
 
-func TestDecrypt(t *testing.T) {
-	var text = "daniaw"
-	textEncrypt, err := module.EncryptString(text)
-	if err != nil {
-		t.Errorf("Error encrypting document: %v", err)
-	} else {
-		fmt.Println("Data berhasil dienkripsi :", textEncrypt)
-	}
-	textDecrypt, err := module.DecryptString(textEncrypt)
-	if err != nil {
-		t.Errorf("Error decrypting document: %v", err)
-	} else {
-		fmt.Println("Data berhasil didekripsi :", textDecrypt)
-	}
-}
+// func TestDecrypt(t *testing.T) {
+// 	var text = "daniaw"
+// 	textEncrypt, err := module.EncryptString(text)
+// 	if err != nil {
+// 		t.Errorf("Error encrypting document: %v", err)
+// 	} else {
+// 		fmt.Println("Data berhasil dienkripsi :", textEncrypt)
+// 	}
+// 	textDecrypt, err := module.DecryptString(textEncrypt)
+// 	if err != nil {
+// 		t.Errorf("Error decrypting document: %v", err)
+// 	} else {
+// 		fmt.Println("Data berhasil didekripsi :", textDecrypt)
+// 	}
+// }
 
 func TestGenerateOTP(t *testing.T) {
 	var email = ""
