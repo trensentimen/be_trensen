@@ -332,3 +332,35 @@ func TestDeleteSetting(t *testing.T) {
 		fmt.Println("Data berhasil dihapus dengan id :", doc.ID)
 	}
 }
+
+func TestUpdateSentimen(t *testing.T) {
+	var doc model.Topic
+	id, err := primitive.ObjectIDFromHex("655c1398bca3b5b5c70ca13b")
+	doc.ID = id
+	if err != nil {
+		t.Errorf("Error getting document: %v", err)
+	}
+
+	var docs []model.DataTopics
+
+	id2, _ := primitive.ObjectIDFromHex("65656f64b2380efe1ca013de")
+	data1 := model.DataTopics{
+		ID:       id2,
+		Sentimen: "negatif",
+	}
+
+	id3, _ := primitive.ObjectIDFromHex("65656f64b2380efe1ca013dc")
+	data2 := model.DataTopics{
+		ID:       id3,
+		Sentimen: "negatif",
+	}
+
+	docs = append(docs, data1, data2)
+
+	status, err := module.UpdateSentimen(db, doc, docs)
+	if err != nil {
+		t.Errorf("Error updating document: %v", err)
+	} else {
+		fmt.Println("Data berhasil dirubah dengan id :", status)
+	}
+}

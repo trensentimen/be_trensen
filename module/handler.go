@@ -344,6 +344,46 @@ func GCFHandlerScraping(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname string, r *h
 	return GCFReturnStruct(Response)
 }
 
+func GCFHandlerUpdateSentimen(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname string, r *http.Request) string {
+	conn := MongoConnect(MONGOCONNSTRINGENV, dbname)
+	var Response model.Response
+	Response.Status = false
+
+	// get token from header
+	token := r.Header.Get("Authorization")
+	token = strings.TrimPrefix(token, "Bearer ")
+	if token == "" {
+		Response.Message = "error parsing application/json1:"
+		return GCFReturnStruct(Response)
+	}
+
+	// decode token
+	_, err1 := watoken.Decode(os.Getenv(PASETOPUBLICKEY), token)
+
+	if err1 != nil {
+		Response.Message = "error parsing application/json2: " + err1.Error() + ";" + token
+		return GCFReturnStruct(Response)
+	}
+
+	var dataTopics []model.DataTopics
+	err := json.NewDecoder(r.Body).Decode(&dataTopics)
+	if err != nil {
+		Response.Message = "error parsing application/json: " + err.Error()
+		return GCFReturnStruct(Response)
+	}
+	var topic model.Topic
+	topic.ID = dataTopics[0].ID
+
+	_, err = UpdateSentimen(conn, topic, dataTopics)
+	if err != nil {
+		Response.Message = err.Error()
+		return GCFReturnStruct(Response)
+	}
+	Response.Status = true
+	Response.Message = "Update Sentimen Berhasil"
+	return GCFReturnStruct(Response)
+}
+
 func GCFReturnStruct(DataStuct any) string {
 	jsondata, _ := json.Marshal(DataStuct)
 	return string(jsondata)

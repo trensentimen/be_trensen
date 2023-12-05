@@ -254,7 +254,7 @@ func GetTopic(_id primitive.ObjectID, db *mongo.Database) (doc model.Topic, data
 		}
 		return doc, dataTopics, fmt.Errorf("kesalahan mengambil data untuk ID %s: %s", _id, err.Error())
 	}
-	if doc.Status == "inputting" {
+	if doc.Status == "inputting" || doc.Status == "analyzing" {
 		collection := db.Collection("datatopics")
 		filter := bson.M{"topicid": _id}
 		cursor, err := collection.Find(context.Background(), filter)
@@ -579,6 +579,35 @@ func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopi
 	}
 
 	return docs, nil
+}
+
+// func AnalizeSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopics, err error) {
+func UpdateSentimen(db *mongo.Database, topic model.Topic, docs []model.DataTopics) (string, error) {
+
+	isError := false
+	// update status sentimen pada data topics
+	for _, doc := range docs {
+		// err = UpdateOneDoc(db, "datatopics", doc.ID, doc)
+		filter := bson.M{"_id": doc.ID}
+		update := bson.M{"$set": bson.M{"sentimen": doc.Sentimen}}
+		_, err := db.Collection("datatopics").UpdateOne(context.Background(), filter, update)
+		if err != nil {
+			isError = true
+			fmt.Println(err.Error())
+		}
+	}
+
+	if !isError {
+		//update status topic
+		filter := bson.M{"_id": topic.ID}
+		update := bson.M{"$set": bson.M{"status": "analyzing"}}
+		_, err := db.Collection("topic").UpdateOne(context.Background(), filter, update)
+		if err != nil {
+			isError = true
+			fmt.Println(err.Error())
+		}
+	}
+	return "success", nil
 }
 
 func AddSetting(db *mongo.Database, doc model.Setting) (insertedID primitive.ObjectID, err error) {
