@@ -584,7 +584,6 @@ func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopi
 // func AnalizeSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopics, err error) {
 func UpdateSentimen(db *mongo.Database, topic model.Topic, docs []model.DataTopics) (string, error) {
 
-	isError := false
 	// update status sentimen pada data topics
 	for _, doc := range docs {
 		// err = UpdateOneDoc(db, "datatopics", doc.ID, doc)
@@ -592,21 +591,18 @@ func UpdateSentimen(db *mongo.Database, topic model.Topic, docs []model.DataTopi
 		update := bson.M{"$set": bson.M{"sentimen": doc.Sentimen}}
 		_, err := db.Collection("datatopics").UpdateOne(context.Background(), filter, update)
 		if err != nil {
-			isError = true
 			fmt.Println(err.Error())
 		}
 	}
 
-	if !isError {
-		//update status topic
-		filter := bson.M{"_id": topic.ID}
-		update := bson.M{"$set": bson.M{"status": "analyzing"}}
-		_, err := db.Collection("topic").UpdateOne(context.Background(), filter, update)
-		if err != nil {
-			isError = true
-			fmt.Println(err.Error())
-		}
+	//update status topic
+	filter := bson.M{"_id": topic.ID}
+	update := bson.M{"$set": bson.M{"status": "analyzing"}}
+	_, err := db.Collection("topic").UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
+
 	return "success", nil
 }
 
