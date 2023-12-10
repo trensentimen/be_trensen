@@ -335,22 +335,15 @@ func TestDeleteSetting(t *testing.T) {
 }
 
 func TestUpdateSentimen(t *testing.T) {
-	var doc model.Topic
-	id, err := primitive.ObjectIDFromHex("655c1398bca3b5b5c70ca13b")
-	doc.ID = id
-	if err != nil {
-		t.Errorf("Error getting document: %v", err)
-	}
-
 	var docs []model.DataTopics
 
-	id2, _ := primitive.ObjectIDFromHex("65656f64b2380efe1ca013de")
+	id2, _ := primitive.ObjectIDFromHex("6575962050ba622ef0e1eec9")
 	data1 := model.DataTopics{
 		ID:       id2,
 		Sentimen: "negatif",
 	}
 
-	id3, _ := primitive.ObjectIDFromHex("65656f64b2380efe1ca013dc")
+	id3, _ := primitive.ObjectIDFromHex("6575962050ba622ef0e1eeca")
 	data2 := model.DataTopics{
 		ID:       id3,
 		Sentimen: "negatif",
@@ -358,10 +351,38 @@ func TestUpdateSentimen(t *testing.T) {
 
 	docs = append(docs, data1, data2)
 
-	status, err := module.UpdateSentimen(db, doc, docs)
+	status, err := module.UpdateSentimen(db, docs)
 	if err != nil {
 		t.Errorf("Error updating document: %v", err)
 	} else {
 		fmt.Println("Data berhasil dirubah dengan id :", status)
+	}
+}
+
+func TestGetDataTopic(t *testing.T) {
+	var docs []model.DataTopics
+
+	id2, _ := primitive.ObjectIDFromHex("6575962050ba622ef0e1eec9")
+	data1 := model.DataTopics{
+		ID:       id2,
+		Sentimen: "negatif",
+	}
+
+	id3, _ := primitive.ObjectIDFromHex("6575962050ba622ef0e1eeca")
+	data2 := model.DataTopics{
+		ID:       id3,
+		Sentimen: "negatif",
+	}
+
+	docs = append(docs, data1, data2)
+
+	var doc model.DataTopics
+	doc.ID = docs[0].ID
+
+	docTopic, err := module.GetDataTopic(doc.ID, db)
+	if err != nil {
+		t.Errorf("Error getting document: %v", err)
+	} else {
+		fmt.Println("Data berhasil dirubah dengan id :", docTopic.TopicId)
 	}
 }

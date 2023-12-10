@@ -269,6 +269,19 @@ func GetTopic(_id primitive.ObjectID, db *mongo.Database) (doc model.Topic, data
 	}
 	return doc, dataTopics, nil
 }
+func GetDataTopic(_id primitive.ObjectID, db *mongo.Database) (dataTopics model.DataTopics, err error) {
+	collection := db.Collection("datatopics")
+	filter := bson.M{"_id": _id}
+	err = collection.FindOne(context.Background(), filter).Decode(&dataTopics)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return dataTopics, fmt.Errorf("tidak ada data ditemukan untuk ID %s", _id)
+		}
+		return dataTopics, fmt.Errorf("kesalahan mengambil data untuk ID %s: %s", _id, err.Error())
+	}
+
+	return dataTopics, nil
+}
 
 func GetAllTopic(db *mongo.Database) (docs []model.Topic, err error) {
 	collection := db.Collection("topic")
@@ -582,7 +595,7 @@ func ScrapSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopi
 }
 
 // func AnalizeSentimen(db *mongo.Database, topic model.Topic) (docs []model.DataTopics, err error) {
-func UpdateSentimen(db *mongo.Database, topic model.Topic, docs []model.DataTopics) (string, error) {
+func UpdateSentimen(db *mongo.Database, docs []model.DataTopics) (string, error) {
 
 	// update status sentimen pada data topics
 	for _, doc := range docs {
@@ -596,9 +609,17 @@ func UpdateSentimen(db *mongo.Database, topic model.Topic, docs []model.DataTopi
 	}
 
 	//update status topic
-	filter := bson.M{"_id": topic.ID}
+	var doc model.DataTopics
+	doc.ID = docs[0].ID
+	docTopic, err := GetDataTopic(doc.ID, db)
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("Data berhasil dirubah dengan id :", docTopic.TopicId)
+	}
+	filter := bson.M{"_id": docTopic.TopicId}
 	update := bson.M{"$set": bson.M{"status": "analyzing"}}
-	_, err := db.Collection("topic").UpdateOne(context.Background(), filter, update)
+	_, err = db.Collection("topic").UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

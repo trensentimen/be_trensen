@@ -371,10 +371,8 @@ func GCFHandlerUpdateSentimen(PASETOPUBLICKEY, MONGOCONNSTRINGENV, dbname string
 		Response.Message = "error parsing application/json: " + err.Error()
 		return GCFReturnStruct(Response)
 	}
-	var topic model.Topic
-	topic.ID = dataTopics[0].ID
 
-	_, err = UpdateSentimen(conn, topic, dataTopics)
+	_, err = UpdateSentimen(conn, dataTopics)
 	if err != nil {
 		Response.Message = err.Error()
 		return GCFReturnStruct(Response)
