@@ -78,8 +78,8 @@ func CrawlingYoutube(topic model.Topic) (dataTopic []model.DataTopics, errM stri
 
 	call := youtubeService.CommentThreads.List([]string{"snippet"}).
 		VideoId(videoID).
-		MaxResults(5). // Adjust the maximum results as needed
-		Order("time")  // Specify the sorting order
+		MaxResults(100). // Adjust the maximum results as needed
+		Order("time")    // Specify the sorting order
 
 	response, err := call.Do()
 	if err != nil {
