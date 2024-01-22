@@ -443,7 +443,7 @@ func SendOTP(db *mongo.Database, email string) (string, error) {
 
 	// Menambahkan header ke permintaan
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Token", "v4.public.eyJleHAiOiIyMDIzLTEyLTE2VDE3OjQ3OjQ3KzA3OjAwIiwiaWF0IjoiMjAyMy0xMS0xNlQxNzo0Nzo0NyswNzowMCIsImlkIjoiNjI4NTcwMzMwNTE2MyIsIm5iZiI6IjIwMjMtMTEtMTZUMTc6NDc6NDcrMDc6MDAifXlYzCjMwUnUHhdyWpcQyq33tOKlhJIWHzBr5Zq2PgmYxjeghbWqkS1QUH7ojfzPYd1fIaWOHnoE29zbE-v_tQk")
+	req.Header.Set("Token", "v4.public.eyJleHAiOiIyMDI0LTAyLTIxVDA5OjQ4OjA4WiIsImlhdCI6IjIwMjQtMDEtMjJUMDk6NDg6MDhaIiwiaWQiOiI2Mjg1NzAzMzA1MTYzIiwibmJmIjoiMjAyNC0wMS0yMlQwOTo0ODowOFoifYn3IUKu7ld4doLXTYxbSkXv55OLizLbLozU0D0DMVuEWEJM6MmvV7Ok3iPZAT5Bbdg_OLhJqToHiZUFTZSFlgc")
 	req.Header.Set("Content-Type", "application/json")
 
 	// Melakukan permintaan HTTP POST
